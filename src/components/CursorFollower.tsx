@@ -1,58 +1,85 @@
 import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
 
-type CursorFollowerProps = {
-  reducedMotion: boolean
-}
+const interactiveSelector = [
+  'a',
+  'button',
+  'input',
+  'textarea',
+  'select',
+  '[role="button"]',
+  '.magnetic-button',
+  '.project-card',
+].join(', ')
 
-export function CursorFollower({ reducedMotion }: CursorFollowerProps) {
+export function CursorFollower() {
   const cursorX = useMotionValue(-120)
   const cursorY = useMotionValue(-120)
-  const smoothX = useSpring(cursorX, { stiffness: 260, damping: 34, mass: 0.4 })
-  const smoothY = useSpring(cursorY, { stiffness: 260, damping: 34, mass: 0.4 })
-  const [enabled, setEnabled] = useState(false)
+  const smoothX = useSpring(cursorX, { stiffness: 420, damping: 38, mass: 0.3 })
+  const smoothY = useSpring(cursorY, { stiffness: 420, damping: 38, mass: 0.3 })
   const [visible, setVisible] = useState(false)
+  const [interactive, setInteractive] = useState(false)
+  const [pressed, setPressed] = useState(false)
 
   useEffect(() => {
-    const pointerQuery = window.matchMedia('(pointer: fine)')
-    const updateEnabled = () => setEnabled(pointerQuery.matches && !reducedMotion)
+    document.documentElement.classList.add('custom-cursor-active')
 
-    updateEnabled()
-    pointerQuery.addEventListener('change', updateEnabled)
-
-    return () => pointerQuery.removeEventListener('change', updateEnabled)
-  }, [reducedMotion])
+    return () => {
+      document.documentElement.classList.remove('custom-cursor-active')
+    }
+  }, [])
 
   useEffect(() => {
-    if (!enabled) {
-      return undefined
+    const isInteractiveTarget = (target: EventTarget | null) => {
+      return target instanceof Element && Boolean(target.closest(interactiveSelector))
     }
 
     const moveCursor = (event: PointerEvent) => {
       cursorX.set(event.clientX - 18)
       cursorY.set(event.clientY - 18)
+      setInteractive(isInteractiveTarget(event.target))
       setVisible(true)
     }
-    const hideCursor = () => setVisible(false)
+    const pressCursor = () => setPressed(true)
+    const releaseCursor = () => setPressed(false)
+    const hideCursor = () => {
+      setVisible(false)
+      setInteractive(false)
+      setPressed(false)
+    }
 
     window.addEventListener('pointermove', moveCursor)
+    window.addEventListener('pointerdown', pressCursor)
+    window.addEventListener('pointerup', releaseCursor)
+    window.addEventListener('blur', hideCursor)
     document.documentElement.addEventListener('mouseleave', hideCursor)
 
     return () => {
       window.removeEventListener('pointermove', moveCursor)
+      window.removeEventListener('pointerdown', pressCursor)
+      window.removeEventListener('pointerup', releaseCursor)
+      window.removeEventListener('blur', hideCursor)
       document.documentElement.removeEventListener('mouseleave', hideCursor)
     }
-  }, [cursorX, cursorY, enabled])
+  }, [cursorX, cursorY])
 
-  if (!enabled) {
-    return null
-  }
+  const className = [
+    'cursor-follower',
+    visible ? 'is-visible' : '',
+    interactive ? 'is-interactive' : '',
+    pressed ? 'is-pressed' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <motion.div
       aria-hidden="true"
-      className="cursor-follower"
-      style={{ x: smoothX, y: smoothY, opacity: visible ? 1 : 0 }}
-    />
+      className={className}
+      style={{ x: smoothX, y: smoothY }}
+    >
+      <span className="cursor-follower__ring" />
+      <span className="cursor-follower__dot" />
+    </motion.div>
   )
 }

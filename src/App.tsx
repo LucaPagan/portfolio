@@ -1,33 +1,22 @@
-import { About } from './components/About'
-import { Contact } from './components/Contact'
 import { CursorFollower } from './components/CursorFollower'
-import { Footer } from './components/Footer'
-import { Hero } from './components/Hero'
 import { Navigation } from './components/Navigation'
-import { Projects } from './components/Projects'
-import { Skills } from './components/Skills'
-import { Timeline } from './components/Timeline'
-import { useGsapReveal } from './hooks/useGsapReveal'
+import { VerticalStarJourney } from './components/starJourney/VerticalStarJourney'
+import { useDesktopMotion } from './hooks/useDesktopMotion'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import './styles/site.css'
+import './styles/verticalStarJourney.css'
 
 function App() {
-  useGsapReveal()
   const reducedMotion = usePrefersReducedMotion()
+  const desktopMotion = useDesktopMotion(reducedMotion)
 
   return (
     <div className="site-shell">
-      <CursorFollower reducedMotion={reducedMotion} />
+      {desktopMotion ? <CursorFollower /> : null}
       <Navigation />
       <main>
-        <Hero reducedMotion={reducedMotion} />
-        <About />
-        <Skills />
-        <Projects reducedMotion={reducedMotion} />
-        <Timeline />
-        <Contact />
+        <VerticalStarJourney reducedMotion={reducedMotion} />
       </main>
-      <Footer />
     </div>
   )
 }

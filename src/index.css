@@ -20,7 +20,7 @@
 
 html {
   scroll-behavior: smooth;
-  background: #050604;
+  background: #02040a;
 }
 
 body {
@@ -29,9 +29,10 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 12% 18%, rgba(54, 214, 255, 0.16), transparent 30rem),
-    radial-gradient(circle at 92% 8%, rgba(184, 255, 94, 0.11), transparent 28rem),
-    linear-gradient(135deg, #050604 0%, #0d0e09 48%, #070707 100%);
+    radial-gradient(circle at 12% 18%, rgba(103, 232, 249, 0.14), transparent 30rem),
+    radial-gradient(circle at 86% 12%, rgba(178, 127, 255, 0.11), transparent 28rem),
+    radial-gradient(circle at 72% 82%, rgba(255, 184, 77, 0.08), transparent 30rem),
+    linear-gradient(135deg, #02040a 0%, #050711 48%, #02040a 100%);
 }
 
 body::selection {

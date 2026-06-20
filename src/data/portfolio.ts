@@ -1,11 +1,14 @@
 export type Project = {
+  slug: string
   title: string
   eyebrow: string
   year: string
-  repository: string
-  description: string
+  repository?: string
+  repoName?: string
+  problem: string
+  solution: string
   impact: string
-  tech: string[]
+  stack: string[]
   signals: string[]
   accent: 'aqua' | 'lime' | 'amber' | 'coral' | 'violet'
 }
@@ -14,6 +17,10 @@ export type SkillGroup = {
   title: string
   description: string
   items: string[]
+  highlights?: {
+    label: string
+    description: string
+  }[]
 }
 
 export type TimelineItem = {
@@ -22,116 +29,215 @@ export type TimelineItem = {
   description: string
 }
 
-export const profileHighlights = [
+export type ContactItem = {
+  label: string
+  value: string
+  href: string
+}
+
+export const identity = {
+  title: 'Luca Pagano',
+  eyebrow: 'Identity',
+  description: 'Developer at heart. Builder of better questions.',
+}
+
+export const aboutProfile = {
+  title: 'Builder of better questions.',
+  eyebrow: 'About / Profile',
+  paragraphs: [
+    "I'm Luca, a Computer Science student at Federico II and a Student at the Apple Developer Academy.",
+    'I started coding because I found it almost magical: a few lines on a screen, and you can solve real problems for real people. That feeling of impact is still what drives everything I do.',
+    'But the more projects I built, the more I noticed something: as a developer, I felt limited. Not by skill, but by scope. I realized I give my best when I have freedom, freedom to question the "why," shape the direction, and make decisions, not just execute them. That\'s when my creativity and my rational, problem-solving side really come together.',
+    "I'm also a connector by nature. I care about keeping a team aligned, motivated, and moving in the same direction, and I think that's where I can create the most impact.",
+    "So I'm not moving away from development. I'm moving toward the role where my impact has no ceiling.",
+  ],
+}
+
+export const contactItems: ContactItem[] = [
   {
-    value: '9',
-    label: 'repo analizzati',
+    label: 'Email',
+    value: 'lucapagano04@gmail.com',
+    href: 'mailto:lucapagano04@gmail.com',
   },
   {
+    label: 'Phone',
+    value: '+39 351 16 31 787',
+    href: 'tel:+393511631787',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'www.linkedin.com/in/luca-pagano-33b70430b',
+    href: 'https://www.linkedin.com/in/luca-pagano-33b70430b',
+  },
+  {
+    label: 'GitHub',
+    value: 'GitHub',
+    href: 'https://github.com/LucaPagan',
+  },
+]
+
+export const profileHighlights = [
+  {
     value: '6',
-    label: 'stack principali',
+    label: 'case study',
+  },
+  {
+    value: '1',
+    label: 'platform WWF',
   },
   {
     value: 'AI',
-    label: 'on-device e sensori',
+    label: 'on-device e comportamento',
   },
 ]
 
 export const projects: Project[] = [
   {
-    title: 'WWF Visitor App',
-    eyebrow: 'iOS offline-first ecosystem',
+    slug: 'wwf-astroni-immersive-journey',
+    title: 'WWF Astroni - Immersive Journey',
+    eyebrow: 'offline-first nature platform',
     year: '2026',
-    repository: 'https://github.com/LucaPagan/WWF_Frontend',
-    description:
-      'App SwiftUI per percorsi, POI, eventi e contenuti scaricabili, progettata per funzionare bene anche senza rete.',
+    problem:
+      'Unire esperienza visitatore e gestione operativa per l’Oasi WWF Astroni, mantenendo percorsi, POI, eventi, media e gamification affidabili anche con rete instabile.',
+    solution:
+      'Piattaforma composta da app visitor SwiftUI offline-first e console iPadOS gestionale: SwiftData locale, Supabase, contenuti scaricabili, QR offline, storage media e sync controllato.',
     impact:
-      'SwiftData locale, sync pull-only da Supabase, QR offline, gamification, profili anonimi e pacchetti contenuto.',
-    tech: ['SwiftUI', 'SwiftData', 'Supabase', 'QR offline', 'Gamification'],
-    signals: ['Offline-first', 'Local models', 'Content packages'],
+      'Un ecosistema unico: chi visita vive un journey immersivo e resiliente, mentre chi gestisce puo preparare contenuti, pacchetti e aggiornamenti senza perdere controllo operativo.',
+    stack: ['SwiftUI', 'iPadOS', 'SwiftData', 'Supabase', 'Offline sync'],
+    signals: ['Visitor app + admin console', 'QR offline', 'Media packages'],
     accent: 'aqua',
   },
   {
-    title: 'WWF Manager iPad',
-    eyebrow: 'admin console nativa',
-    year: '2026',
-    repository: 'https://github.com/LucaPagan/GestionaleWWFIpad',
-    description:
-      'Gestionale iPad per creare, validare e sincronizzare contenuti, percorsi, eventi e campagne gamificate.',
-    impact:
-      'Sincronizzazione bidirezionale, outbox locale, classificazione media, storage remoto e sessione manager.',
-    tech: ['iPadOS', 'SwiftData', 'Supabase Storage', 'NWPathMonitor', 'Sync workers'],
-    signals: ['Admin UX', 'Background sync', 'Media tiers'],
-    accent: 'lime',
-  },
-  {
-    title: 'AI Rep Counter',
+    slug: 'bicep-curl-counter',
+    title: 'BicepCurlCounter',
     eyebrow: 'watchOS + Create ML',
     year: '2025',
     repository: 'https://github.com/LucaPagan/Americano-Challenge-2-',
-    description:
-      'Contatore di curl su Apple Watch nato da un percorso completo: raccolta dati, training e inferenza in tempo reale.',
+    repoName: 'Americano-Challenge-2-',
+    problem:
+      'Riconoscere ripetizioni di bicipite da accelerometro e giroscopio Apple Watch, partendo da dati grezzi raccolti in condizioni reali.',
+    solution:
+      'Pipeline completa: data logger watchOS a 50Hz, export CSV verso iPhone, training Create ML e app finale con sliding window da 100 campioni, filtro anti-jitter e state machine.',
     impact:
-      'Sensori a 50Hz, dataset CSV, finestra predittiva, filtro anti-jitter, Core ML e comunicazione Watch/iPhone.',
-    tech: ['watchOS', 'CoreMotion', 'Core ML', 'Create ML', 'WatchConnectivity'],
-    signals: ['50Hz sensors', 'Sliding window', 'Haptic feedback'],
+      'Prototipo end-to-end di ML on-device per fitness: inferenza realtime, feedback aptico, goal configurabile da iPhone e storico set via WatchConnectivity.',
+    stack: ['watchOS', 'CoreMotion', 'Core ML', 'Create ML', 'WatchConnectivity'],
+    signals: ['50Hz sampling', '100-sample window', 'Anti-jitter filter'],
     accent: 'amber',
   },
   {
-    title: 'TRIS Multiplayer LSO',
-    eyebrow: 'systems programming',
+    slug: 'tris',
+    title: 'TRIS',
+    eyebrow: 'laboratorio sistemi operativi',
     year: '2026',
     repository: 'https://github.com/LucaPagan/Tic-Tac-Toe-LSO',
-    description:
-      'Session manager multiplayer per Tris con server C concorrente, client JavaFX e orchestrazione Docker.',
+    repoName: 'Tic-Tac-Toe-LSO',
+    problem:
+      'Realizzare per l’esame di Laboratorio di Sistemi Operativi un Tris multiplayer con concorrenza, lobby, join request e partite isolate tra client.',
+    solution:
+      'Architettura client-server con socket TCP: server C multithread POSIX, opcode di rete, session state machine, client JavaFX dark theme e demo scalabile con Docker Compose.',
     impact:
-      'Socket TCP, thread POSIX, partite esclusive, lobby, rivincita, broadcast degli stati e test lato server.',
-    tech: ['C', 'POSIX threads', 'TCP sockets', 'JavaFX', 'Docker Compose'],
-    signals: ['Concurrent server', 'Session state', 'Containerized demo'],
+      'Progetto d’esame completo: sincronizzazione stati, session ID univoci, rivincita, broadcast lobby e avvio ripetibile con Docker per testare piu client.',
+    stack: ['C', 'POSIX threads', 'TCP sockets', 'JavaFX', 'Docker Compose'],
+    signals: ['Network opcodes', 'Session states', 'Docker scaling'],
     accent: 'coral',
   },
   {
-    title: 'GameSCH6',
-    eyebrow: 'SpriteKit game systems',
+    slug: 'quito',
+    title: 'Quito',
+    eyebrow: 'SpriteKit social impact game',
     year: '2026',
     repository: 'https://github.com/LucaPagan/GameSCH6',
-    description:
-      'Gioco iOS SpriteKit con mondo procedurale deterministico e progressione collegata ad abitudini quotidiane.',
+    repoName: 'GameSCH6',
+    problem:
+      'Trasformare il tema degli effetti negativi del fumo in un gioco iOS capace di far percepire al giocatore conseguenze e progressione in modo interattivo.',
+    solution:
+      'SpriteKit game con generazione deterministica a chunk, checkpoint, lanes calcolate, stamina/salute polmonare e HabitTracker con rollover giornaliero.',
     impact:
-      'Generazione a chunk, checkpoint, persistenza sessione, HUD salute/stamina e logica di progressione locale.',
-    tech: ['SpriteKit', 'GameplayKit', 'Swift', 'UserDefaults', 'Procedural generation'],
-    signals: ['Deterministic world', 'Habit loop', 'Saved sessions'],
+      'Oltre al lato tecnico, il gioco usa meccaniche e feedback per sensibilizzare: il gameplay rende visibili gli effetti negativi del fumo invece di limitarsi a raccontarli.',
+    stack: ['SpriteKit', 'GameplayKit', 'Swift', 'UserDefaults', 'Procedural generation'],
+    signals: ['Fixed seed', 'Chunk streaming', 'Health feedback loop'],
     accent: 'violet',
   },
   {
+    slug: 'unina-estates',
     title: 'Unina Estates',
-    eyebrow: 'Android + backend',
+    eyebrow: 'university software engineering',
     year: '2026',
     repository: 'https://github.com/LucaPagan/UninaEstatesApplication',
-    description:
-      'Applicazione real estate Android con Compose, mappe, networking e backend Kotlin/Spring collegato al dominio.',
+    repoName: 'UninaEstatesApplication / BackEnd',
+    problem:
+      'Progetto universitario di Ingegneria del Software: creare un’app real estate e documentare anche ricerca, analisi, requisiti e decisioni progettuali.',
+    solution:
+      'Client Android Kotlin con Jetpack Compose, mappe, Retrofit, Coil e notifiche; backend Kotlin/Spring Boot con JPA, Security, Redis cache e PostgreSQL.',
     impact:
-      'Client mobile con Retrofit, Maps/Firebase e backend Spring Boot con JPA, Security, Redis e PostgreSQL.',
-    tech: ['Kotlin', 'Jetpack Compose', 'Spring Boot', 'PostgreSQL', 'Firebase'],
-    signals: ['Maps UX', 'REST APIs', 'Cloud-ready backend'],
+      'Il valore non e solo l’app: il progetto copre il percorso di ingegneria software, dalla scelta delle soluzioni alla costruzione full-stack del prodotto.',
+    stack: ['Kotlin', 'Jetpack Compose', 'Spring Boot', 'PostgreSQL', 'Firebase'],
+    signals: ['Requirements work', 'Decision making', 'REST + mobile'],
     accent: 'aqua',
   },
   {
+    slug: 'maieutic',
     title: 'Maieutic',
-    eyebrow: 'SwiftUI product prototype',
+    eyebrow: 'AI dependency recovery app',
     year: '2026',
     repository: 'https://github.com/LucaPagan/Maieutic',
-    description:
-      'Prototype iOS con onboarding, calibrazione, autenticazione, nickname e area principale guidata da metriche locali.',
+    repoName: 'Maieutic',
+    problem:
+      'Immaginare un’app che aiuti a riabilitarsi dalla dipendenza dalle AI, accompagnando l’utente con percorsi, metriche e consapevolezza progressiva.',
+    solution:
+      'Router SwiftUI dichiarativo con loading, onboarding, calibrazione, auth, nickname e main area; SwiftData per utenti, metriche, thread e messaggi.',
     impact:
-      'Routing dichiarativo, SwiftData, componenti animati e cura delle transizioni di stato dell’esperienza utente.',
-    tech: ['SwiftUI', 'SwiftData', 'Authentication', 'Product flows', 'Animated UI'],
-    signals: ['Onboarding', 'Calibration', 'Interaction metrics'],
-    accent: 'amber',
+      'Prototipo product-oriented centrato sul cambiamento comportamentale: flussi progressivi, metriche locali e UI animata per rendere visibile il percorso di recupero.',
+    stack: ['SwiftUI', 'SwiftData', 'Authentication', 'Product flows', 'Animated UI'],
+    signals: ['Recovery flow', 'Calibration', 'Local metrics'],
+    accent: 'lime',
   },
 ]
 
 export const skillGroups: SkillGroup[] = [
+  {
+    title: 'Product & Soft Skills',
+    description: 'The human and product layer I bring alongside technical execution.',
+    items: [
+      'Problem solving',
+      'Communication',
+      'Team collaboration',
+      'Ownership',
+      'Autonomous learning',
+      'Curiosity',
+      'Adaptability',
+    ],
+    highlights: [
+      {
+        label: 'Problem solving',
+        description: 'I look for the right problem before the right solution.',
+      },
+      {
+        label: 'Communication',
+        description: 'Translating between technical and non-technical people, naturally.',
+      },
+      {
+        label: 'Team collaboration',
+        description: 'I believe the best products come from the best-aligned teams.',
+      },
+      {
+        label: 'Ownership',
+        description: 'I take responsibility for outcomes, not just tasks.',
+      },
+      {
+        label: 'Autonomous learning',
+        description: 'Comfortable moving fast into unfamiliar territory.',
+      },
+      {
+        label: 'Curiosity',
+        description: 'I ask "why" more than I ask "how".',
+      },
+      {
+        label: 'Adaptability',
+        description: 'Used to switching context between code, design, and people.',
+      },
+    ],
+  },
   {
     title: 'Native Product',
     description: 'Esperienze mobile con sensazione di prodotto finito.',
@@ -182,7 +288,7 @@ export const timeline: TimelineItem[] = [
     period: 'Jun 2026',
     title: 'Ecosistemi offline-first',
     description:
-      'Doppia app WWF: visitor app e gestionale iPad con sync, storage, contenuti scaricabili e gamification.',
+      'Piattaforma WWF Astroni con visitor journey, gestionale iPad, sync, storage, contenuti scaricabili e gamification.',
   },
 ]
 
