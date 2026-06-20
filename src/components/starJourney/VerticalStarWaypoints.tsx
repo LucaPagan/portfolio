@@ -1,10 +1,11 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { AdditiveBlending } from 'three'
-import type { Group, LineBasicMaterial, MeshBasicMaterial, PointLight, PointsMaterial, Vector3 } from 'three'
+import { AdditiveBlending, Color, ShaderMaterial } from 'three'
+import type { Group, PointLight, Vector3 } from 'three'
 import type { MutableRefObject } from 'react'
 import type { VerticalStarChapter } from '../../data/verticalStarJourney'
 import { getVerticalWaypointStrength, verticalStarAccentColors } from '../../data/verticalStarJourney'
+import { cosmicParticleFragmentShader, cosmicParticleVertexShader } from './particleShaders'
 
 type VerticalStarWaypointsProps = {
   chapterCount: number
@@ -23,6 +24,104 @@ type VerticalWaypointStarProps = {
   reducedMotion: boolean
 }
 
+type WaypointParticleCloud = {
+  alphas: Float32Array
+  colors: Float32Array
+  life: Float32Array
+  phases: Float32Array
+  positions: Float32Array
+  sizes: Float32Array
+  turbulence: Float32Array
+}
+
+function createSeededRandom(seed: number) {
+  let value = seed
+
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296
+
+    return value / 4294967296
+  }
+}
+
+function createWaypointMaterial() {
+  const material = new ShaderMaterial({
+    blending: AdditiveBlending,
+    depthWrite: false,
+    fragmentShader: cosmicParticleFragmentShader,
+    transparent: true,
+    uniforms: {
+      uArrival: { value: 0 },
+      uOpacity: { value: 0.65 },
+      uTime: { value: 0 },
+    },
+    vertexShader: cosmicParticleVertexShader,
+  })
+
+  material.toneMapped = false
+
+  return material
+}
+
+function createWaypointCloud({
+  accentColor,
+  index,
+  reducedMotion,
+}: {
+  accentColor: string
+  index: number
+  reducedMotion: boolean
+}): WaypointParticleCloud {
+  const random = createSeededRandom(7100 + index * 97)
+  const count = reducedMotion ? 48 : 96
+  const positions = new Float32Array(count * 3)
+  const colors = new Float32Array(count * 3)
+  const alphas = new Float32Array(count)
+  const life = new Float32Array(count)
+  const phases = new Float32Array(count)
+  const sizes = new Float32Array(count)
+  const turbulence = new Float32Array(count)
+  const accent = new Color(accentColor)
+  const white = new Color('#fffdf1')
+  const warm = new Color('#ffe8a3')
+
+  for (let particleIndex = 0; particleIndex < count; particleIndex += 1) {
+    const normalized = particleIndex / Math.max(count - 1, 1)
+    const coreParticle = particleIndex < count * 0.26
+    const rayParticle = !coreParticle && particleIndex % 5 === 0
+    const orbit = random() * Math.PI * 2
+    const radius = coreParticle
+      ? Math.pow(random(), 1.9) * 0.07
+      : rayParticle
+        ? 0.12 + random() * (0.26 + (index % 3) * 0.025)
+        : 0.075 + Math.pow(random(), 1.5) * 0.16
+    const rayStretch = rayParticle ? 1.35 + random() * 0.78 : 1
+    const verticalCompression = rayParticle ? 0.38 + random() * 0.28 : 0.72
+    const color = accent
+      .clone()
+      .lerp(white, coreParticle ? 0.64 + random() * 0.22 : 0.2 + random() * 0.2)
+      .lerp(warm, coreParticle ? random() * 0.18 : random() * 0.08)
+
+    positions[particleIndex * 3] = Math.cos(orbit) * radius * rayStretch
+    positions[particleIndex * 3 + 1] = Math.sin(orbit) * radius * verticalCompression
+    positions[particleIndex * 3 + 2] = Math.sin(orbit * 1.7 + normalized * 3.1) * (coreParticle ? 0.018 : 0.045)
+    colors[particleIndex * 3] = color.r
+    colors[particleIndex * 3 + 1] = color.g
+    colors[particleIndex * 3 + 2] = color.b
+    alphas[particleIndex] = coreParticle ? 0.58 + random() * 0.36 : 0.16 + random() * 0.42
+    life[particleIndex] = radius / 0.36
+    phases[particleIndex] = random() * Math.PI * 2
+    sizes[particleIndex] = coreParticle
+      ? 0.08 + random() * 0.16
+      : rayParticle
+        ? 0.018 + random() * 0.038
+        : 0.025 + random() * 0.058
+    turbulence[particleIndex] = coreParticle ? 0.002 + random() * 0.006 : 0.006 + random() * 0.018
+  }
+
+  return { alphas, colors, life, phases, positions, sizes, turbulence }
+}
+
 function VerticalWaypointStar({
   chapter,
   chapterCount,
@@ -32,60 +131,16 @@ function VerticalWaypointStar({
   reducedMotion,
 }: VerticalWaypointStarProps) {
   const groupRef = useRef<Group>(null)
-  const coronaRef = useRef<Group>(null)
-  const coreMaterialRef = useRef<MeshBasicMaterial>(null)
-  const coreBloomMaterialRef = useRef<MeshBasicMaterial>(null)
-  const glowMaterialRef = useRef<MeshBasicMaterial>(null)
-  const outerGlowMaterialRef = useRef<MeshBasicMaterial>(null)
-  const atmosphereMaterialRef = useRef<MeshBasicMaterial>(null)
-  const ringMaterialRef = useRef<MeshBasicMaterial>(null)
-  const outerRingMaterialRef = useRef<MeshBasicMaterial>(null)
-  const flareMaterialRef = useRef<LineBasicMaterial>(null)
-  const crossFlareMaterialRef = useRef<LineBasicMaterial>(null)
-  const coronaMaterialRef = useRef<PointsMaterial>(null)
+  const particleGroupRef = useRef<Group>(null)
   const lightRef = useRef<PointLight>(null)
   const color = verticalStarAccentColors[chapter.accent]
-  const starburst = useMemo(() => {
-    const long = 0.46 + (index % 3) * 0.035
-    const short = 0.18 + (index % 2) * 0.025
+  const cloud = useMemo(
+    () => createWaypointCloud({ accentColor: color, index, reducedMotion }),
+    [color, index, reducedMotion],
+  )
+  const material = useMemo(() => createWaypointMaterial(), [])
 
-    return new Float32Array([
-      -long, 0, 0.01, long, 0, 0.01,
-      0, -short, 0.01, 0, short, 0.01,
-      -short * 0.82, -short * 0.52, 0.01, short * 0.82, short * 0.52, 0.01,
-      -short * 0.62, short * 0.72, 0.01, short * 0.62, -short * 0.72, 0.01,
-    ])
-  }, [index])
-  const fineStarburst = useMemo(() => {
-    const long = 0.28 + (index % 4) * 0.018
-    const tilt = 0.1 + (index % 5) * 0.18
-
-    return new Float32Array([
-      -long, 0, 0.02, long, 0, 0.02,
-      Math.cos(tilt) * -long * 0.62,
-      Math.sin(tilt) * -long * 0.62,
-      0.02,
-      Math.cos(tilt) * long * 0.62,
-      Math.sin(tilt) * long * 0.62,
-      0.02,
-    ])
-  }, [index])
-  const coronaParticles = useMemo(() => {
-    const count = reducedMotion ? 14 : 30
-    const values = new Float32Array(count * 3)
-
-    for (let particleIndex = 0; particleIndex < count; particleIndex += 1) {
-      const orbit = particleIndex * 2.399 + index * 0.58
-      const radius = 0.13 + ((particleIndex * 17 + index * 5) % 19) * 0.007
-      const verticalCompression = 0.52 + (particleIndex % 3) * 0.08
-
-      values[particleIndex * 3] = Math.cos(orbit) * radius
-      values[particleIndex * 3 + 1] = Math.sin(orbit) * radius * verticalCompression
-      values[particleIndex * 3 + 2] = Math.sin(orbit * 1.7) * 0.035
-    }
-
-    return values
-  }, [index, reducedMotion])
+  useEffect(() => () => material.dispose(), [material])
 
   useFrame((state) => {
     if (!groupRef.current) {
@@ -95,189 +150,42 @@ function VerticalWaypointStar({
     const scaledProgress = progressRef.current * Math.max(chapterCount - 1, 1)
     const completed = scaledProgress > index + 0.12
     const strength = getVerticalWaypointStrength(progressRef.current, index, chapterCount)
-    const pulse = reducedMotion ? 1 : 1 + Math.sin(state.clock.elapsedTime * 2.4 + index) * 0.055
-    const scale = (0.78 + (completed ? 0.16 : 0) + strength * 0.58) * pulse
+    const pulse = reducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 2.1 + index * 0.8) * 0.055
+    const scale = 0.82 + (completed ? 0.11 : 0) + strength * 0.58 + pulse
 
     groupRef.current.scale.setScalar(scale)
 
-    if (!reducedMotion) {
-      groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.34 + index * 0.7) * 0.055
-
-      if (coronaRef.current) {
-        coronaRef.current.rotation.z = state.clock.elapsedTime * (0.12 + index * 0.006)
-        coronaRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.22 + index) * 0.12
-      }
+    if (particleGroupRef.current && !reducedMotion) {
+      particleGroupRef.current.rotation.z = state.clock.elapsedTime * (0.08 + index * 0.004)
+      particleGroupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.26 + index) * 0.16
     }
 
-    if (coreMaterialRef.current) {
-      coreMaterialRef.current.opacity = 0.62 + strength * 0.38
-      coreMaterialRef.current.color.set(strength > 0.42 ? '#fffdf1' : color)
-    }
-
-    if (coreBloomMaterialRef.current) {
-      coreBloomMaterialRef.current.opacity = 0.14 + (completed ? 0.04 : 0) + strength * 0.36
-    }
-
-    if (glowMaterialRef.current) {
-      glowMaterialRef.current.opacity = 0.14 + (completed ? 0.1 : 0) + strength * 0.36
-    }
-
-    if (outerGlowMaterialRef.current) {
-      outerGlowMaterialRef.current.opacity = 0.04 + (completed ? 0.04 : 0) + strength * 0.18
-    }
-
-    if (atmosphereMaterialRef.current) {
-      atmosphereMaterialRef.current.opacity = 0.018 + (completed ? 0.018 : 0) + strength * 0.08
-    }
-
-    if (ringMaterialRef.current) {
-      ringMaterialRef.current.opacity = 0.18 + (completed ? 0.14 : 0) + strength * 0.58
-    }
-
-    if (outerRingMaterialRef.current) {
-      outerRingMaterialRef.current.opacity = 0.08 + (completed ? 0.08 : 0) + strength * 0.25
-    }
-
-    if (flareMaterialRef.current) {
-      flareMaterialRef.current.opacity = 0.08 + (completed ? 0.05 : 0) + strength * 0.52
-    }
-
-    if (crossFlareMaterialRef.current) {
-      crossFlareMaterialRef.current.opacity = 0.05 + (completed ? 0.04 : 0) + strength * 0.3
-    }
-
-    if (coronaMaterialRef.current) {
-      coronaMaterialRef.current.opacity = 0.08 + (completed ? 0.06 : 0) + strength * 0.38
-      coronaMaterialRef.current.size = 0.018 + strength * 0.016
-    }
+    material.uniforms.uArrival.value = strength
+    material.uniforms.uOpacity.value = 0.46 + (completed ? 0.16 : 0) + strength * 0.64
+    material.uniforms.uTime.value = reducedMotion ? 0 : state.clock.elapsedTime
 
     if (lightRef.current) {
-      lightRef.current.intensity = 0.08 + strength * 1.08
+      lightRef.current.intensity = 0.08 + strength * 0.95
     }
   })
 
   return (
     <group ref={groupRef} position={position}>
-      <mesh>
-        <sphereGeometry args={[0.048, 24, 16]} />
-        <meshBasicMaterial ref={coreMaterialRef} color={color} transparent opacity={0.72} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.082, 24, 16]} />
-        <meshBasicMaterial
-          ref={coreBloomMaterialRef}
-          blending={AdditiveBlending}
-          color="#fffdf1"
-          depthWrite={false}
-          opacity={0.16}
-          transparent
-          toneMapped={false}
-        />
-      </mesh>
-      <lineSegments rotation={[0, 0, Math.PI / 18]}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[starburst, 3]} />
-        </bufferGeometry>
-        <lineBasicMaterial
-          ref={flareMaterialRef}
-          blending={AdditiveBlending}
-          color="#fffdf1"
-          depthWrite={false}
-          opacity={0.08}
-          transparent
-          toneMapped={false}
-        />
-      </lineSegments>
-      <lineSegments rotation={[0, 0, Math.PI / 2.8]}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[fineStarburst, 3]} />
-        </bufferGeometry>
-        <lineBasicMaterial
-          ref={crossFlareMaterialRef}
-          blending={AdditiveBlending}
-          color={color}
-          depthWrite={false}
-          opacity={0.05}
-          transparent
-          toneMapped={false}
-        />
-      </lineSegments>
-      <mesh>
-        <sphereGeometry args={[0.18, 32, 18]} />
-        <meshBasicMaterial
-          ref={glowMaterialRef}
-          blending={AdditiveBlending}
-          color={color}
-          depthWrite={false}
-          opacity={0.1}
-          transparent
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.31, 32, 18]} />
-        <meshBasicMaterial
-          ref={outerGlowMaterialRef}
-          blending={AdditiveBlending}
-          color={color}
-          depthWrite={false}
-          opacity={0.04}
-          transparent
-          toneMapped={false}
-        />
-      </mesh>
-      <group ref={coronaRef}>
+      <group ref={particleGroupRef}>
         <points>
           <bufferGeometry>
-            <bufferAttribute attach="attributes-position" args={[coronaParticles, 3]} />
+            <bufferAttribute attach="attributes-position" args={[cloud.positions, 3]} />
+            <bufferAttribute attach="attributes-aColor" args={[cloud.colors, 3]} />
+            <bufferAttribute attach="attributes-aAlpha" args={[cloud.alphas, 1]} />
+            <bufferAttribute attach="attributes-aLife" args={[cloud.life, 1]} />
+            <bufferAttribute attach="attributes-aPhase" args={[cloud.phases, 1]} />
+            <bufferAttribute attach="attributes-aSize" args={[cloud.sizes, 1]} />
+            <bufferAttribute attach="attributes-aTurbulence" args={[cloud.turbulence, 1]} />
           </bufferGeometry>
-          <pointsMaterial
-            ref={coronaMaterialRef}
-            blending={AdditiveBlending}
-            color="#fffdf1"
-            depthWrite={false}
-            opacity={0.08}
-            size={0.018}
-            sizeAttenuation
-            transparent
-          />
+          <primitive attach="material" object={material} />
         </points>
       </group>
-      <mesh>
-        <sphereGeometry args={[0.48, 32, 18]} />
-        <meshBasicMaterial
-          ref={atmosphereMaterialRef}
-          blending={AdditiveBlending}
-          color={color}
-          depthWrite={false}
-          opacity={0.02}
-          transparent
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.18, 0.0035, 10, 64]} />
-        <meshBasicMaterial
-          ref={ringMaterialRef}
-          blending={AdditiveBlending}
-          color={color}
-          depthWrite={false}
-          opacity={0.16}
-          transparent
-        />
-      </mesh>
-      <mesh rotation={[Math.PI / 2, 0, Math.PI / 8]}>
-        <torusGeometry args={[0.28, 0.0025, 10, 72]} />
-        <meshBasicMaterial
-          ref={outerRingMaterialRef}
-          blending={AdditiveBlending}
-          color={color}
-          depthWrite={false}
-          opacity={0.08}
-          transparent
-        />
-      </mesh>
-      <pointLight ref={lightRef} color={color} distance={2.35} intensity={0} />
+      <pointLight ref={lightRef} color={color} distance={2.15} intensity={0} />
     </group>
   )
 }

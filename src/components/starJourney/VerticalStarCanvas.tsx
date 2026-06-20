@@ -908,6 +908,7 @@ function VerticalScene({
       <VerticalStarTrail
         accentColor={accentColor}
         chapterCount={chapters.length}
+        compact={compact}
         curve={curve}
         progressRef={progressRef}
         reducedMotion={reducedMotion}
@@ -922,6 +923,7 @@ function VerticalScene({
       <VerticalComet
         accentColor={accentColor}
         chapterCount={chapters.length}
+        compact={compact}
         curve={curve}
         progressRef={progressRef}
         reducedMotion={reducedMotion}
