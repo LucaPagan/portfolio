@@ -1,0 +1,642 @@
+.darkroom-portfolio {
+  position: relative;
+  min-height: 100svh;
+  color: var(--portfolio-text);
+  background:
+    linear-gradient(180deg, rgba(9, 13, 20, 0.18), rgba(9, 13, 20, 0.84) 44%, rgba(9, 13, 20, 0.24)),
+    var(--portfolio-bg);
+  isolation: isolate;
+  --type-hero: 9.2rem;
+  --type-section: 5.1rem;
+  --type-project: 2.75rem;
+  --type-row-title: 2rem;
+  --type-contact: 2.8rem;
+}
+
+.darkroom-portfolio::before,
+.darkroom-portfolio::after {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  content: "";
+  pointer-events: none;
+}
+
+.darkroom-portfolio::before {
+  background:
+    linear-gradient(122deg, transparent 0 19%, rgba(108, 143, 181, 0.2) 28%, transparent 43%),
+    linear-gradient(47deg, transparent 0 31%, rgba(178, 132, 89, 0.18) 42%, transparent 59%),
+    linear-gradient(160deg, rgba(18, 26, 38, 0.95), rgba(32, 39, 49, 0.72) 42%, rgba(12, 16, 23, 0.98));
+  background-size: 160% 160%, 150% 150%, 100% 100%;
+  animation: portfolio-gradient-drift 26s ease-in-out infinite alternate;
+}
+
+.darkroom-portfolio::after {
+  z-index: -1;
+  opacity: 0.5;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, transparent, black 18%, black 78%, transparent);
+}
+
+@keyframes portfolio-gradient-drift {
+  from {
+    background-position: 0% 18%, 100% 24%, 50% 50%;
+  }
+
+  to {
+    background-position: 78% 46%, 16% 72%, 50% 50%;
+  }
+}
+
+.darkroom-section {
+  position: relative;
+  width: min(var(--layout-max), calc(100% - 80px));
+  min-height: auto;
+  margin: 0 auto;
+  padding: 108px 0;
+  scroll-margin-top: 84px;
+}
+
+.darkroom-section::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(244, 241, 233, 0.22), transparent);
+}
+
+.darkroom-kicker {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.darkroom-section__intro {
+  display: grid;
+  max-width: 660px;
+  gap: 16px;
+  margin-bottom: 46px;
+}
+
+.darkroom-section__intro p {
+  margin: 0;
+  color: var(--portfolio-soft);
+  font-size: 1.08rem;
+  line-height: 1.58;
+}
+
+.darkroom-hero {
+  display: grid;
+  min-height: 100svh;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  align-items: end;
+  gap: 48px;
+  padding-top: 150px;
+}
+
+.darkroom-hero::before {
+  display: none;
+}
+
+.darkroom-hero__copy {
+  align-self: center;
+}
+
+.darkroom-hero__copy h1,
+.darkroom-manifesto h2,
+.darkroom-skills h2,
+.darkroom-work h2,
+.darkroom-timeline h2,
+.darkroom-contact h2 {
+  margin: 0;
+  color: var(--portfolio-text);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.darkroom-hero__copy h1 {
+  display: grid;
+  margin-top: 20px;
+  font-size: var(--type-hero);
+  line-height: 0.92;
+}
+
+.darkroom-hero__copy h1 span {
+  display: block;
+}
+
+.darkroom-hero__note {
+  align-self: end;
+  display: grid;
+  gap: 34px;
+  margin-bottom: 18px;
+}
+
+.darkroom-hero__lead {
+  margin: 0;
+  color: var(--portfolio-soft);
+  font-size: 1.25rem;
+  line-height: 1.42;
+}
+
+.darkroom-hero-focus {
+  display: grid;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--portfolio-line);
+}
+
+.darkroom-hero-focus__title {
+  max-width: 390px;
+  margin: 0;
+  color: var(--portfolio-text);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.18;
+  text-wrap: balance;
+}
+
+.darkroom-hero-focus__list {
+  display: grid;
+  margin-top: 6px;
+  border-top: 1px solid var(--portfolio-line);
+}
+
+.darkroom-hero-focus__item {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--portfolio-line);
+}
+
+.darkroom-hero-focus__item span {
+  color: var(--portfolio-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.darkroom-hero-focus__item strong {
+  display: block;
+  color: var(--portfolio-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.darkroom-hero-focus__item p {
+  margin: 7px 0 0;
+  color: var(--portfolio-soft);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.darkroom-manifesto,
+.darkroom-skills,
+.darkroom-work,
+.darkroom-timeline,
+.darkroom-contact {
+  display: grid;
+  align-content: center;
+}
+
+.darkroom-manifesto h2,
+.darkroom-skills h2,
+.darkroom-work h2,
+.darkroom-timeline h2,
+.darkroom-contact h2 {
+  max-width: 980px;
+  font-size: var(--type-section);
+  line-height: 1.04;
+}
+
+.darkroom-copy-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  max-width: 940px;
+  margin-top: 44px;
+  margin-left: auto;
+}
+
+.darkroom-copy-columns p {
+  margin: 0;
+  color: var(--portfolio-soft);
+  font-size: 1.02rem;
+  line-height: 1.68;
+}
+
+.darkroom-skill-list,
+.darkroom-timeline-list,
+.darkroom-contact-list {
+  display: grid;
+  margin-top: 54px;
+  border-top: 1px solid var(--portfolio-line);
+}
+
+.darkroom-skill-row,
+.darkroom-timeline-row,
+.darkroom-contact-list a {
+  display: grid;
+  gap: 32px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--portfolio-line);
+}
+
+.darkroom-skill-row {
+  grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+}
+
+.darkroom-skill-row span,
+.darkroom-project__headline p,
+.darkroom-project__body > p > strong,
+.darkroom-timeline-row span,
+.darkroom-contact-list span {
+  display: block;
+  color: var(--portfolio-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.darkroom-skill-row p {
+  max-width: 480px;
+  margin: 10px 0 0;
+  color: var(--portfolio-soft);
+  font-size: 1rem;
+  line-height: 1.56;
+}
+
+.darkroom-inline-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-content: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.darkroom-inline-list li {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid var(--portfolio-line);
+  border-radius: 999px;
+  color: var(--portfolio-text);
+  background: rgba(244, 241, 233, 0.045);
+  font-size: 0.9rem;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.darkroom-project .darkroom-inline-list li {
+  min-height: 30px;
+  color: var(--portfolio-soft);
+  background: rgba(244, 241, 233, 0.035);
+}
+
+.darkroom-project .darkroom-inline-list--signal li {
+  border-color: rgba(var(--project-accent-rgb), 0.34);
+  color: var(--portfolio-text);
+  background: rgba(var(--project-accent-rgb), 0.12);
+}
+
+.darkroom-project-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 48px;
+}
+
+.darkroom-project {
+  --project-accent-rgb: 108, 143, 181;
+  display: grid;
+  position: relative;
+  grid-template-columns: 64px minmax(250px, 0.74fr) minmax(340px, 1fr);
+  gap: 30px;
+  overflow: hidden;
+  padding: 28px;
+  border: 1px solid rgba(244, 241, 233, 0.13);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(244, 241, 233, 0.045), rgba(244, 241, 233, 0.018));
+  box-shadow: inset 0 1px 0 rgba(244, 241, 233, 0.06);
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.darkroom-project::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  content: "";
+  background: rgba(var(--project-accent-rgb), 0.88);
+}
+
+.darkroom-project:hover {
+  border-color: rgba(var(--project-accent-rgb), 0.42);
+  background:
+    linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.15), transparent 36%),
+    linear-gradient(180deg, rgba(244, 241, 233, 0.055), rgba(244, 241, 233, 0.022));
+  transform: translateY(-2px);
+}
+
+.darkroom-project[data-accent="aqua"] {
+  --project-accent-rgb: 108, 143, 181;
+}
+
+.darkroom-project[data-accent="lime"] {
+  --project-accent-rgb: 148, 186, 116;
+}
+
+.darkroom-project[data-accent="amber"] {
+  --project-accent-rgb: 216, 163, 90;
+}
+
+.darkroom-project[data-accent="coral"] {
+  --project-accent-rgb: 222, 126, 106;
+}
+
+.darkroom-project[data-accent="violet"] {
+  --project-accent-rgb: 153, 132, 218;
+}
+
+.darkroom-project__number {
+  color: rgba(var(--project-accent-rgb), 0.95);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.darkroom-project__headline,
+.darkroom-project__body {
+  min-width: 0;
+}
+
+.darkroom-project__headline h3 {
+  max-width: 680px;
+  margin: 14px 0 0;
+  color: var(--portfolio-text);
+  font-size: var(--type-project);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.darkroom-project__body {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
+.darkroom-project__body p {
+  margin: 0;
+  color: var(--portfolio-soft);
+  font-size: 0.98rem;
+  line-height: 1.58;
+}
+
+.darkroom-project__body > p > strong {
+  margin-bottom: 5px;
+}
+
+.darkroom-project__meta {
+  display: grid;
+  gap: 14px;
+}
+
+.darkroom-project__tag-group {
+  display: grid;
+  gap: 8px;
+}
+
+.darkroom-project__tag-label {
+  display: block;
+  color: var(--portfolio-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.darkroom-repo-button {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  width: min(100%, 430px);
+  min-height: 58px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+  padding: 11px 14px;
+  border: 1px solid rgba(244, 241, 233, 0.86);
+  border-radius: 8px;
+  color: var(--portfolio-bg);
+  background: var(--portfolio-text);
+  font-size: 0.84rem;
+  text-decoration: none;
+  letter-spacing: 0;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.darkroom-repo-button:hover {
+  border-color: rgba(var(--project-accent-rgb), 0.75);
+  background: rgb(255, 252, 244);
+  transform: translateY(-1px);
+}
+
+.darkroom-repo-button span {
+  min-width: 0;
+}
+
+.darkroom-repo-button strong,
+.darkroom-repo-button small {
+  display: block;
+}
+
+.darkroom-repo-button strong {
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.18;
+  text-transform: uppercase;
+}
+
+.darkroom-repo-button small {
+  margin-top: 3px;
+  color: rgba(11, 15, 22, 0.66);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.darkroom-timeline-row {
+  grid-template-columns: 170px minmax(220px, 0.45fr) minmax(0, 1fr);
+}
+
+.darkroom-timeline-row h3 {
+  margin: 0;
+  color: var(--portfolio-text);
+  font-size: var(--type-row-title);
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.darkroom-timeline-row p {
+  margin: 0;
+  color: var(--portfolio-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.darkroom-contact > p:not(.darkroom-kicker) {
+  max-width: 620px;
+  margin: 22px 0 0;
+  color: var(--portfolio-soft);
+  font-size: 1.25rem;
+  line-height: 1.44;
+}
+
+.darkroom-contact-list a {
+  grid-template-columns: 150px minmax(0, 1fr) 24px;
+  align-items: center;
+  color: var(--portfolio-text);
+  text-decoration: none;
+}
+
+.darkroom-contact-list strong {
+  font-size: var(--type-contact);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.darkroom-contact-list svg,
+.darkroom-repo-button svg {
+  stroke-width: 1.35;
+}
+
+@media (max-width: 1060px) {
+  .darkroom-portfolio {
+    --type-hero: 7.2rem;
+    --type-section: 4rem;
+    --type-project: 2.45rem;
+    --type-row-title: 1.75rem;
+    --type-contact: 2.25rem;
+  }
+
+  .darkroom-hero,
+  .darkroom-project,
+  .darkroom-timeline-row {
+    grid-template-columns: 1fr;
+  }
+
+  .darkroom-hero__note {
+    max-width: 520px;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .darkroom-portfolio {
+    --type-hero: 4.8rem;
+    --type-section: 2.9rem;
+    --type-project: 2.05rem;
+    --type-row-title: 1.5rem;
+    --type-contact: 1.75rem;
+  }
+
+  .darkroom-section {
+    width: calc(100% - 40px);
+    min-height: auto;
+    padding: 82px 0 66px;
+  }
+
+  .darkroom-hero {
+    min-height: 92svh;
+    padding-top: 132px;
+  }
+
+  .darkroom-hero__lead {
+    font-size: 1.08rem;
+  }
+
+  .darkroom-hero-focus {
+    gap: 14px;
+    padding-top: 20px;
+  }
+
+  .darkroom-hero-focus__title {
+    font-size: 1.25rem;
+  }
+
+  .darkroom-hero-focus__item {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 14px;
+    padding: 15px 0;
+  }
+
+  .darkroom-hero-focus__item p {
+    font-size: 0.94rem;
+  }
+
+  .darkroom-copy-columns,
+  .darkroom-skill-row,
+  .darkroom-contact-list a {
+    grid-template-columns: 1fr;
+  }
+
+  .darkroom-copy-columns {
+    margin-left: 0;
+  }
+
+  .darkroom-project {
+    gap: 18px;
+  }
+
+  .darkroom-contact-list a,
+  .darkroom-skill-row,
+  .darkroom-timeline-row {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 430px) {
+  .darkroom-portfolio {
+    --type-hero: 4rem;
+    --type-section: 2.45rem;
+    --type-project: 1.8rem;
+    --type-contact: 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .darkroom-portfolio::before {
+    animation: none;
+  }
+}

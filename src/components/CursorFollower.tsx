@@ -8,8 +8,8 @@ const interactiveSelector = [
   'textarea',
   'select',
   '[role="button"]',
-  '.magnetic-button',
-  '.project-card',
+  '.darkroom-repo-button',
+  '.darkroom-project',
 ].join(', ')
 
 export function CursorFollower() {

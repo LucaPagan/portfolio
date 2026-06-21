@@ -76,18 +76,37 @@ export const contactItems: ContactItem[] = [
   },
 ]
 
+export const heroFocus = {
+  eyebrow: 'How I work',
+  title: 'I turn technical curiosity into product direction.',
+  items: [
+    {
+      label: 'Product thinking',
+      description: 'I start from the why, then shape priorities, flows and trade-offs.',
+    },
+    {
+      label: 'Native craft',
+      description: 'I build mobile products, data flows and systems with enough depth to feel real.',
+    },
+    {
+      label: 'Team alignment',
+      description: 'I care about keeping people focused, motivated and moving with ownership.',
+    },
+  ],
+}
+
 export const profileHighlights = [
   {
-    value: '6',
-    label: 'case study',
+    value: 'WHY',
+    label: 'product direction',
   },
   {
-    value: '1',
-    label: 'platform WWF',
+    value: 'CODE',
+    label: 'native craft',
   },
   {
-    value: 'AI',
-    label: 'on-device e comportamento',
+    value: 'TEAM',
+    label: 'alignment and ownership',
   },
 ]
 

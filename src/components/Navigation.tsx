@@ -1,36 +1,27 @@
-import { Code2 } from 'lucide-react'
-import { verticalStarNavItems } from '../data/verticalStarJourney'
-import { scrollToVerticalJourneyProgress } from '../utils/verticalStarScroll'
+import { navItems } from '../data/portfolio'
 
 export function Navigation() {
+  const primaryItems = navItems.filter((item) => item.label !== 'Contact')
+
   return (
     <header className="site-nav" aria-label="Primary navigation">
       <a
         className="brand-mark"
         href="#identity"
         aria-label="Luca Pagano home"
-        onClick={(event) => {
-          event.preventDefault()
-          scrollToVerticalJourneyProgress(0)
-        }}
       >
-        <Code2 aria-hidden="true" size={18} />
-        <span>LP</span>
+        Luca Pagano
       </a>
 
       <nav className="nav-links">
-        {verticalStarNavItems.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            onClick={(event) => {
-              event.preventDefault()
-              scrollToVerticalJourneyProgress(item.progressTarget)
-            }}
-          >
+        {primaryItems.map((item) => (
+          <a key={item.href} href={item.href}>
             {item.label}
           </a>
         ))}
+        <a className="nav-contact" href="#contact">
+          Contact
+        </a>
       </nav>
     </header>
   )

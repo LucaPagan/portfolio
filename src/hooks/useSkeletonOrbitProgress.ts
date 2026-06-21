@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { getVerticalStarActiveIndex, snapVerticalStarProgress } from '../data/verticalStarJourney'
 
-export function useVerticalStarProgress(chapterCount: number, reducedMotion: boolean) {
+export function useSkeletonOrbitProgress(chapterCount: number, reducedMotion: boolean) {
   const trackRef = useRef<HTMLDivElement>(null)
   const progressRef = useRef(0)
-  const frameRef = useRef<number | null>(null)
   const activeIndexRef = useRef(0)
   const [progress, setProgress] = useState(0)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -21,21 +19,37 @@ export function useVerticalStarProgress(chapterCount: number, reducedMotion: boo
       const clampedProgress = Math.min(Math.max(nextProgress, 0), 1)
       progressRef.current = clampedProgress
 
-      if (frameRef.current) {
-        window.cancelAnimationFrame(frameRef.current)
+      // For Skeleton Orbit, we want raw 0-1 progress mapped linearly to chapters
+      const visualProgress = clampedProgress
+      const lastIndex = Math.max(chapterCount - 1, 0)
+      const nextIndex = lastIndex === 0 ? 0 : Math.min(lastIndex, Math.max(0, Math.round(visualProgress * lastIndex)))
+
+      setProgress((currentProgress) =>
+        Math.abs(currentProgress - clampedProgress) > 0.001 ? clampedProgress : currentProgress,
+      )
+
+      if (nextIndex !== activeIndexRef.current) {
+        activeIndexRef.current = nextIndex
+        setActiveIndex(nextIndex)
+      }
+    }
+
+    const updateFromNativeScroll = () => {
+      const trackElement = trackRef.current
+
+      if (!trackElement) {
+        return
       }
 
-      frameRef.current = window.requestAnimationFrame(() => {
-        const nextIndex = getVerticalStarActiveIndex(clampedProgress, chapterCount)
+      const start = trackElement.offsetTop
+      const end = start + trackElement.offsetHeight - window.innerHeight
+      const nextProgress = end <= start ? 0 : (window.scrollY - start) / (end - start)
 
-        setProgress(clampedProgress)
-
-        if (nextIndex !== activeIndexRef.current) {
-          activeIndexRef.current = nextIndex
-          setActiveIndex(nextIndex)
-        }
-      })
+      updateProgress(nextProgress)
     }
+
+    window.addEventListener('scroll', updateFromNativeScroll, { passive: true })
+    window.addEventListener('resize', updateFromNativeScroll)
 
     void Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
       ([gsapModule, scrollTriggerModule]) => {
@@ -56,7 +70,10 @@ export function useVerticalStarProgress(chapterCount: number, reducedMotion: boo
           snap: reducedMotion
             ? undefined
             : {
-                snapTo: (value) => snapVerticalStarProgress(value, chapterCount),
+                snapTo: (value) => {
+                  const lastIndex = Math.max(chapterCount - 1, 1)
+                  return Math.round(value * lastIndex) / lastIndex
+                },
                 duration: { min: 0.18, max: 0.44 },
                 delay: 0.08,
                 ease: 'power2.out',
@@ -65,7 +82,7 @@ export function useVerticalStarProgress(chapterCount: number, reducedMotion: boo
           onUpdate: (self) => updateProgress(self.progress),
         })
 
-        updateProgress(trigger.progress)
+        updateFromNativeScroll()
         ScrollTrigger.refresh()
 
         cleanup = () => trigger.kill()
@@ -75,10 +92,8 @@ export function useVerticalStarProgress(chapterCount: number, reducedMotion: boo
     return () => {
       cancelled = true
 
-      if (frameRef.current) {
-        window.cancelAnimationFrame(frameRef.current)
-      }
-
+      window.removeEventListener('scroll', updateFromNativeScroll)
+      window.removeEventListener('resize', updateFromNativeScroll)
       cleanup?.()
     }
   }, [chapterCount, reducedMotion])

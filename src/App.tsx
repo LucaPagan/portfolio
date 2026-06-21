@@ -1,10 +1,10 @@
 import { CursorFollower } from './components/CursorFollower'
+import { DarkroomPortfolio } from './components/darkroom/DarkroomPortfolio'
 import { Navigation } from './components/Navigation'
-import { VerticalStarJourney } from './components/starJourney/VerticalStarJourney'
 import { useDesktopMotion } from './hooks/useDesktopMotion'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
+import './styles/darkroomPortfolio.css'
 import './styles/site.css'
-import './styles/verticalStarJourney.css'
 
 function App() {
   const reducedMotion = usePrefersReducedMotion()
@@ -15,7 +15,7 @@ function App() {
       {desktopMotion ? <CursorFollower /> : null}
       <Navigation />
       <main>
-        <VerticalStarJourney reducedMotion={reducedMotion} />
+        <DarkroomPortfolio />
       </main>
     </div>
   )
