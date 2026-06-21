@@ -120,16 +120,6 @@
   }
 }
 
-@keyframes darkroom-noise-drift {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-28px, 18px, 0);
-  }
-}
-
 @keyframes darkroom-orbit-drift {
   from {
     transform: translate3d(0, 0, 0) rotate(-18deg);
@@ -291,7 +281,6 @@
 
 .darkroom-hero__copy h1 span {
   display: block;
-  will-change: transform, opacity, filter;
 }
 
 .darkroom-hero__note {
@@ -383,7 +372,7 @@
   content: "";
   background: linear-gradient(90deg, rgba(244, 241, 233, 0.58), transparent);
   transform-origin: left center;
-  animation: darkroom-scroll-pulse 1.8s ease-in-out infinite;
+  animation: darkroom-scroll-pulse 2.8s ease-in-out infinite;
 }
 
 .darkroom-scroll-cue svg {
@@ -448,12 +437,12 @@
 @keyframes darkroom-scroll-pulse {
   0%,
   100% {
-    opacity: 0.36;
-    transform: scaleX(0.72);
+    opacity: 0.28;
+    transform: scaleX(0.76);
   }
 
   50% {
-    opacity: 1;
+    opacity: 0.74;
     transform: scaleX(1);
   }
 }

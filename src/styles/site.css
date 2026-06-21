@@ -33,10 +33,10 @@
 }
 
 .site-nav.is-scrolled {
-  border-color: rgba(244, 241, 233, 0.12);
-  background: rgba(12, 16, 23, 0.58);
-  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.26);
-  backdrop-filter: blur(16px);
+  border-color: rgba(244, 241, 233, 0.1);
+  background: rgba(12, 16, 23, 0.5);
+  box-shadow: 0 12px 42px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
 }
 
 .brand-mark,
@@ -163,7 +163,7 @@
 .cursor-follower__trail {
   inset: -11px;
   border: 1px solid currentColor;
-  opacity: 0.14;
+  opacity: 0.1;
   transform: scale(0.72);
   transition:
     opacity 180ms ease,
@@ -173,7 +173,7 @@
 .cursor-follower__ring {
   inset: 0;
   border: 1px solid currentColor;
-  box-shadow: 0 0 20px rgba(var(--cursor-accent, 244, 241, 233), 0.1);
+  box-shadow: 0 0 18px rgba(var(--cursor-accent, 244, 241, 233), 0.07);
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
@@ -192,12 +192,12 @@
 }
 
 .cursor-follower.is-interactive .cursor-follower__ring {
-  transform: scale(1.72);
+  transform: scale(1.58);
 }
 
 .cursor-follower.is-interactive .cursor-follower__trail {
-  opacity: 0.22;
-  transform: scale(1.18);
+  opacity: 0.16;
+  transform: scale(1.08);
 }
 
 .cursor-follower.is-interactive .cursor-follower__dot {
@@ -206,12 +206,12 @@
 
 .cursor-follower.is-on-project .cursor-follower__ring {
   border-color: currentColor;
-  box-shadow: 0 0 34px rgba(var(--cursor-accent, 244, 241, 233), 0.22);
+  box-shadow: 0 0 28px rgba(var(--cursor-accent, 244, 241, 233), 0.16);
 }
 
 .cursor-follower.is-on-project .cursor-follower__trail {
-  opacity: 0.32;
-  transform: scale(1.38);
+  opacity: 0.2;
+  transform: scale(1.24);
 }
 
 .cursor-follower.is-pressed .cursor-follower__ring {
