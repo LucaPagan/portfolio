@@ -38,6 +38,16 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Debug dist/index.html
+        run: cat ./dist/index.html
+
+      - name: Verify build output
+        run: |
+          if grep -q "/src/main.tsx" ./dist/index.html; then
+            echo "Error: dist/index.html contains /src/main.tsx. Build did not bundle correctly."
+            exit 1
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 

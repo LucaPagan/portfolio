@@ -39,7 +39,7 @@ const revealItem = {
     filter: 'blur(0px)',
     transition: {
       duration: 0.72,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 }
@@ -66,7 +66,7 @@ const heroNameLine = {
     filter: 'blur(0px)',
     transition: {
       duration: 0.95,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
 }
@@ -126,8 +126,6 @@ export function DarkroomPortfolio() {
           style={desktopMotion ? { y: heroAmbientY } : undefined}
         />
         <span className="darkroom-orbit darkroom-orbit--two" />
-        <span className="darkroom-data-mark darkroom-data-mark--one">40.85N / 14.27E</span>
-        <span className="darkroom-data-mark darkroom-data-mark--two">WHY / CODE / TEAM</span>
       </div>
 
       <motion.section
@@ -181,6 +179,12 @@ export function DarkroomPortfolio() {
           <span>Enter portfolio</span>
           <ArrowDown aria-hidden="true" size={15} />
         </motion.a>
+        <span className="darkroom-hero-mark darkroom-hero-mark--one" aria-hidden="true">
+          40.85N / 14.27E
+        </span>
+        <span className="darkroom-hero-mark darkroom-hero-mark--two" aria-hidden="true">
+          WHY / CODE / TEAM
+        </span>
       </motion.section>
 
       <motion.section

@@ -15,8 +15,7 @@
 
 .darkroom-ambient,
 .darkroom-noise,
-.darkroom-orbit,
-.darkroom-data-mark {
+.darkroom-orbit {
   position: fixed;
   pointer-events: none;
 }
@@ -82,24 +81,6 @@
   opacity: 0.36;
   transform: rotate(24deg);
   animation: darkroom-orbit-drift 42s ease-in-out infinite alternate-reverse;
-}
-
-.darkroom-data-mark {
-  color: rgba(244, 241, 233, 0.28);
-  font-size: 0.68rem;
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.darkroom-data-mark--one {
-  right: 5vw;
-  bottom: 12svh;
-}
-
-.darkroom-data-mark--two {
-  top: 26svh;
-  left: 4vw;
 }
 
 .darkroom-portfolio::before,
@@ -351,7 +332,7 @@
   bottom: 34px;
   left: 0;
   display: inline-grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   align-items: center;
   gap: 10px;
   color: var(--portfolio-muted);
@@ -377,6 +358,26 @@
 .darkroom-scroll-cue:hover svg,
 .darkroom-scroll-cue:focus-visible svg {
   transform: translateY(3px);
+}
+
+.darkroom-hero-mark {
+  position: absolute;
+  color: rgba(244, 241, 233, 0.14);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.darkroom-hero-mark--one {
+  right: 0;
+  bottom: 96px;
+}
+
+.darkroom-hero-mark--two {
+  top: 26svh;
+  left: 16px;
 }
 
 @keyframes darkroom-hero-glow {
@@ -804,6 +805,17 @@
   align-items: center;
   color: var(--portfolio-text);
   text-decoration: none;
+  transition:
+    color 160ms ease,
+    padding-left 160ms ease,
+    border-color 160ms ease;
+}
+
+.darkroom-contact-list a:hover,
+.darkroom-contact-list a:focus-visible {
+  padding-left: 12px;
+  border-color: rgba(244, 241, 233, 0.34);
+  color: rgb(255, 252, 244);
 }
 
 .darkroom-contact-list strong {
@@ -860,6 +872,11 @@
     padding-top: 132px;
   }
 
+  .darkroom-ambient,
+  .darkroom-scroll-cue {
+    display: none;
+  }
+
   .darkroom-hero__lead {
     font-size: 1.08rem;
   }
@@ -895,6 +912,8 @@
 
   .darkroom-project {
     gap: 18px;
+    padding: 28px;
+    transform: none;
   }
 
   .darkroom-contact-list a,
@@ -914,7 +933,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .darkroom-portfolio::before {
+  .darkroom-portfolio::before,
+  .darkroom-noise,
+  .darkroom-orbit,
+  .darkroom-hero__copy::before,
+  .darkroom-hero__title::after,
+  .darkroom-scroll-cue::before {
     animation: none;
+  }
+
+  .darkroom-project,
+  .darkroom-project:hover,
+  .darkroom-repo-button,
+  .darkroom-repo-button:hover,
+  .darkroom-contact-list a,
+  .darkroom-contact-list a:hover {
+    transform: none;
+    transition-duration: 0.01ms;
   }
 }

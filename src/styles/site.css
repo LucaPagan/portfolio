@@ -9,21 +9,39 @@
 .site-nav {
   position: fixed;
   top: 20px;
-  left: 0;
+  left: 50%;
   z-index: 50;
   display: flex;
-  width: 100%;
+  width: min(100% - 56px, 1480px);
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-20);
-  padding: 0 var(--spacing-40);
+  min-height: 42px;
+  padding: 0 10px 0 18px;
+  border: 1px solid transparent;
+  border-radius: 999px;
   color: var(--portfolio-text);
+  background: transparent;
   isolation: isolate;
   pointer-events: none;
+  transform: translateX(-50%);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    backdrop-filter 180ms ease;
+}
+
+.site-nav.is-scrolled {
+  border-color: rgba(244, 241, 233, 0.12);
+  background: rgba(12, 16, 23, 0.58);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(16px);
 }
 
 .brand-mark,
 .nav-links a {
+  position: relative;
   pointer-events: auto;
   color: currentColor;
   font-size: 12px;
@@ -32,6 +50,23 @@
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0;
+}
+
+.brand-mark::after,
+.nav-links a::after {
+  position: absolute;
+  right: 0;
+  bottom: -6px;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: currentColor;
+  opacity: 0;
+  transform: scaleX(0.3);
+  transform-origin: center;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
 }
 
 .brand-mark {
@@ -56,20 +91,45 @@
 .nav-links a:hover,
 .nav-links a:focus-visible,
 .brand-mark:hover,
-.brand-mark:focus-visible {
+.brand-mark:focus-visible,
+.brand-mark.is-active,
+.nav-links a.is-active {
   opacity: 1;
   color: var(--color-bone-white);
+}
+
+.brand-mark:hover::after,
+.brand-mark:focus-visible::after,
+.brand-mark.is-active::after,
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after,
+.nav-links a.is-active::after {
+  opacity: 0.72;
+  transform: scaleX(1);
 }
 
 .nav-links .nav-contact {
   padding: 6px 12px 7px;
   border: 1px solid currentColor;
   border-radius: 75px;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
 }
 
 .nav-links .nav-contact:hover,
-.nav-links .nav-contact:focus-visible {
+.nav-links .nav-contact:focus-visible,
+.nav-links .nav-contact.is-active {
   opacity: 1;
+  border-color: var(--portfolio-text);
+  color: var(--portfolio-bg);
+  background: var(--portfolio-text);
+}
+
+.nav-links .nav-contact::after {
+  display: none;
 }
 
 .cursor-follower {
@@ -79,6 +139,7 @@
   z-index: 80;
   width: 36px;
   height: 36px;
+  color: rgb(var(--cursor-accent, 244, 241, 233));
   pointer-events: none;
   opacity: 0;
   transform-origin: center;
@@ -91,6 +152,7 @@
   opacity: 1;
 }
 
+.cursor-follower__trail,
 .cursor-follower__ring,
 .cursor-follower__dot {
   position: absolute;
@@ -98,11 +160,23 @@
   border-radius: 999px;
 }
 
+.cursor-follower__trail {
+  inset: -11px;
+  border: 1px solid currentColor;
+  opacity: 0.14;
+  transform: scale(0.72);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
 .cursor-follower__ring {
   inset: 0;
   border: 1px solid currentColor;
+  box-shadow: 0 0 20px rgba(var(--cursor-accent, 244, 241, 233), 0.1);
   transition:
     border-color 180ms ease,
+    box-shadow 180ms ease,
     transform 180ms ease;
 }
 
@@ -121,8 +195,23 @@
   transform: scale(1.72);
 }
 
+.cursor-follower.is-interactive .cursor-follower__trail {
+  opacity: 0.22;
+  transform: scale(1.18);
+}
+
 .cursor-follower.is-interactive .cursor-follower__dot {
   transform: scale(0.68);
+}
+
+.cursor-follower.is-on-project .cursor-follower__ring {
+  border-color: currentColor;
+  box-shadow: 0 0 34px rgba(var(--cursor-accent, 244, 241, 233), 0.22);
+}
+
+.cursor-follower.is-on-project .cursor-follower__trail {
+  opacity: 0.32;
+  transform: scale(1.38);
 }
 
 .cursor-follower.is-pressed .cursor-follower__ring {
@@ -135,6 +224,7 @@
 
 .brand-mark:focus-visible,
 .nav-links a:focus-visible,
+.darkroom-scroll-cue:focus-visible,
 .darkroom-repo-button:focus-visible,
 .darkroom-contact-list a:focus-visible {
   outline: 1px solid currentColor;
@@ -152,7 +242,13 @@
   .site-nav {
     top: 16px;
     align-items: flex-start;
-    padding: 0 var(--spacing-20);
+    width: calc(100% - 32px);
+    min-height: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
   .brand-mark {

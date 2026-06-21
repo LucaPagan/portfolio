@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
 
 const interactiveSelector = [
@@ -15,11 +16,14 @@ const interactiveSelector = [
 export function CursorFollower() {
   const cursorX = useMotionValue(-120)
   const cursorY = useMotionValue(-120)
-  const smoothX = useSpring(cursorX, { stiffness: 420, damping: 38, mass: 0.3 })
-  const smoothY = useSpring(cursorY, { stiffness: 420, damping: 38, mass: 0.3 })
+  const smoothX = useSpring(cursorX, { stiffness: 520, damping: 42, mass: 0.24 })
+  const smoothY = useSpring(cursorY, { stiffness: 520, damping: 42, mass: 0.24 })
   const [visible, setVisible] = useState(false)
   const [interactive, setInteractive] = useState(false)
+  const [onProject, setOnProject] = useState(false)
+  const [cursorAccent, setCursorAccent] = useState('244, 241, 233')
   const [pressed, setPressed] = useState(false)
+  const accentRef = useRef(cursorAccent)
 
   useEffect(() => {
     document.documentElement.classList.add('custom-cursor-active')
@@ -35,9 +39,33 @@ export function CursorFollower() {
     }
 
     const moveCursor = (event: PointerEvent) => {
-      cursorX.set(event.clientX - 18)
-      cursorY.set(event.clientY - 18)
+      const target = event.target instanceof Element ? event.target : null
+      const magneticTarget = target?.closest('a, button, .darkroom-project') as HTMLElement | null
+      const projectTarget = target?.closest('.darkroom-project') as HTMLElement | null
+      let nextX = event.clientX
+      let nextY = event.clientY
+
+      if (magneticTarget) {
+        const rect = magneticTarget.getBoundingClientRect()
+        nextX += (rect.left + rect.width / 2 - event.clientX) * 0.12
+        nextY += (rect.top + rect.height / 2 - event.clientY) * 0.12
+      }
+
+      if (projectTarget) {
+        const accent = getComputedStyle(projectTarget).getPropertyValue('--project-accent-rgb').trim() || '244, 241, 233'
+        if (accentRef.current !== accent) {
+          accentRef.current = accent
+          setCursorAccent(accent)
+        }
+      } else if (accentRef.current !== '244, 241, 233') {
+        accentRef.current = '244, 241, 233'
+        setCursorAccent('244, 241, 233')
+      }
+
+      cursorX.set(nextX - 18)
+      cursorY.set(nextY - 18)
       setInteractive(isInteractiveTarget(event.target))
+      setOnProject(Boolean(projectTarget))
       setVisible(true)
     }
     const pressCursor = () => setPressed(true)
@@ -45,6 +73,7 @@ export function CursorFollower() {
     const hideCursor = () => {
       setVisible(false)
       setInteractive(false)
+      setOnProject(false)
       setPressed(false)
     }
 
@@ -67,17 +96,25 @@ export function CursorFollower() {
     'cursor-follower',
     visible ? 'is-visible' : '',
     interactive ? 'is-interactive' : '',
+    onProject ? 'is-on-project' : '',
     pressed ? 'is-pressed' : '',
   ]
     .filter(Boolean)
     .join(' ')
 
+  const style = {
+    x: smoothX,
+    y: smoothY,
+    '--cursor-accent': cursorAccent,
+  } as unknown as CSSProperties
+
   return (
     <motion.div
       aria-hidden="true"
       className={className}
-      style={{ x: smoothX, y: smoothY }}
+      style={style}
     >
+      <span className="cursor-follower__trail" />
       <span className="cursor-follower__ring" />
       <span className="cursor-follower__dot" />
     </motion.div>
