@@ -21,8 +21,8 @@ const revealContainer = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.04,
+      staggerChildren: 0.055,
+      delayChildren: 0.03,
     },
   },
 }
@@ -30,15 +30,15 @@ const revealContainer = {
 const revealItem = {
   hidden: {
     opacity: 0,
-    y: 28,
-    filter: 'blur(10px)',
+    y: 18,
+    filter: 'blur(6px)',
   },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.72,
+      duration: 0.62,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
@@ -48,8 +48,8 @@ const heroContainer = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.16,
+      staggerChildren: 0.09,
+      delayChildren: 0.12,
     },
   },
 }
@@ -57,15 +57,15 @@ const heroContainer = {
 const heroNameLine = {
   hidden: {
     opacity: 0,
-    y: 52,
-    filter: 'blur(14px)',
+    y: 30,
+    filter: 'blur(8px)',
   },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.95,
+      duration: 0.78,
       ease: [0.16, 1, 0.3, 1] as const,
     },
   },
@@ -85,9 +85,9 @@ export function DarkroomPortfolio() {
   const shouldReduceMotion = useReducedMotion()
   const desktopMotion = useDesktopMotion(Boolean(shouldReduceMotion))
   const { scrollYProgress } = useScroll()
-  const heroCopyY = useTransform(scrollYProgress, [0, 0.2], [0, -44])
-  const heroNoteY = useTransform(scrollYProgress, [0, 0.2], [0, -28])
-  const heroAmbientY = useTransform(scrollYProgress, [0, 0.28], [0, 72])
+  const heroCopyY = useTransform(scrollYProgress, [0, 0.22], [0, -28])
+  const heroNoteY = useTransform(scrollYProgress, [0, 0.22], [0, -16])
+  const heroAmbientY = useTransform(scrollYProgress, [0, 0.32], [0, 34])
   const revealInitial = shouldReduceMotion ? false : 'hidden'
   const revealWhileInView = shouldReduceMotion ? undefined : 'visible'
   const heroInitial = shouldReduceMotion ? false : 'hidden'
@@ -101,8 +101,8 @@ export function DarkroomPortfolio() {
     const rect = event.currentTarget.getBoundingClientRect()
     const pointerX = (event.clientX - rect.left) / rect.width
     const pointerY = (event.clientY - rect.top) / rect.height
-    const tiltX = (0.5 - pointerY) * 4
-    const tiltY = (pointerX - 0.5) * 5
+    const tiltX = (0.5 - pointerY) * 2.2
+    const tiltY = (pointerX - 0.5) * 2.8
 
     event.currentTarget.style.setProperty('--pointer-x', `${Math.round(pointerX * 100)}%`)
     event.currentTarget.style.setProperty('--pointer-y', `${Math.round(pointerY * 100)}%`)

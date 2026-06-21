@@ -24,6 +24,11 @@ export function CursorFollower() {
   const [cursorAccent, setCursorAccent] = useState('244, 241, 233')
   const [pressed, setPressed] = useState(false)
   const accentRef = useRef(cursorAccent)
+  const interactiveRef = useRef(interactive)
+  const onProjectRef = useRef(onProject)
+  const visibleRef = useRef(visible)
+  const positionRef = useRef({ x: -120, y: -120 })
+  const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
     document.documentElement.classList.add('custom-cursor-active')
@@ -36,6 +41,18 @@ export function CursorFollower() {
   useEffect(() => {
     const isInteractiveTarget = (target: EventTarget | null) => {
       return target instanceof Element && Boolean(target.closest(interactiveSelector))
+    }
+
+    const updateCursorPosition = () => {
+      frameRef.current = null
+      cursorX.set(positionRef.current.x - 18)
+      cursorY.set(positionRef.current.y - 18)
+    }
+
+    const scheduleCursorPosition = () => {
+      if (frameRef.current === null) {
+        frameRef.current = window.requestAnimationFrame(updateCursorPosition)
+      }
     }
 
     const moveCursor = (event: PointerEvent) => {
@@ -62,15 +79,33 @@ export function CursorFollower() {
         setCursorAccent('244, 241, 233')
       }
 
-      cursorX.set(nextX - 18)
-      cursorY.set(nextY - 18)
-      setInteractive(isInteractiveTarget(event.target))
-      setOnProject(Boolean(projectTarget))
-      setVisible(true)
+      positionRef.current = { x: nextX, y: nextY }
+      scheduleCursorPosition()
+
+      const nextInteractive = isInteractiveTarget(event.target)
+      const nextOnProject = Boolean(projectTarget)
+
+      if (interactiveRef.current !== nextInteractive) {
+        interactiveRef.current = nextInteractive
+        setInteractive(nextInteractive)
+      }
+
+      if (onProjectRef.current !== nextOnProject) {
+        onProjectRef.current = nextOnProject
+        setOnProject(nextOnProject)
+      }
+
+      if (!visibleRef.current) {
+        visibleRef.current = true
+        setVisible(true)
+      }
     }
     const pressCursor = () => setPressed(true)
     const releaseCursor = () => setPressed(false)
     const hideCursor = () => {
+      visibleRef.current = false
+      interactiveRef.current = false
+      onProjectRef.current = false
       setVisible(false)
       setInteractive(false)
       setOnProject(false)
@@ -84,6 +119,10 @@ export function CursorFollower() {
     document.documentElement.addEventListener('mouseleave', hideCursor)
 
     return () => {
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current)
+      }
+
       window.removeEventListener('pointermove', moveCursor)
       window.removeEventListener('pointerdown', pressCursor)
       window.removeEventListener('pointerup', releaseCursor)

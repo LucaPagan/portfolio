@@ -3,7 +3,7 @@
   min-height: 100svh;
   color: var(--portfolio-text);
   background:
-    linear-gradient(180deg, rgba(9, 13, 20, 0.18), rgba(9, 13, 20, 0.84) 44%, rgba(9, 13, 20, 0.24)),
+    linear-gradient(180deg, rgba(9, 13, 20, 0.12), rgba(9, 13, 20, 0.78) 46%, rgba(9, 13, 20, 0.34)),
     var(--portfolio-bg);
   isolation: isolate;
   --type-hero: 9.2rem;
@@ -28,22 +28,21 @@
 
 .darkroom-noise {
   inset: 0;
-  opacity: 0.08;
+  opacity: 0.045;
   background-image:
-    radial-gradient(circle at 18% 12%, rgba(244, 241, 233, 0.38) 0 1px, transparent 1.4px),
-    radial-gradient(circle at 72% 58%, rgba(244, 241, 233, 0.18) 0 1px, transparent 1.5px);
+    radial-gradient(circle at 18% 12%, rgba(244, 241, 233, 0.26) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 72% 58%, rgba(244, 241, 233, 0.12) 0 1px, transparent 1.5px);
   background-position: 0 0, 38px 56px;
-  background-size: 132px 132px, 188px 188px;
+  background-size: 156px 156px, 224px 224px;
   mix-blend-mode: overlay;
-  animation: darkroom-noise-drift 18s steps(8) infinite;
 }
 
 .darkroom-orbit {
   width: 620px;
   aspect-ratio: 1;
-  border: 1px solid rgba(244, 241, 233, 0.08);
+  border: 1px solid rgba(244, 241, 233, 0.045);
   border-radius: 50%;
-  opacity: 0.6;
+  opacity: 0.3;
   transform: rotate(-18deg);
 }
 
@@ -56,7 +55,7 @@
 
 .darkroom-orbit::before {
   inset: 13%;
-  border: 1px solid rgba(108, 143, 181, 0.14);
+  border: 1px solid rgba(108, 143, 181, 0.08);
 }
 
 .darkroom-orbit::after {
@@ -64,8 +63,8 @@
   right: 21%;
   width: 7px;
   height: 7px;
-  background: rgba(244, 241, 233, 0.78);
-  box-shadow: 0 0 26px rgba(108, 143, 181, 0.44);
+  background: rgba(244, 241, 233, 0.48);
+  box-shadow: 0 0 18px rgba(108, 143, 181, 0.22);
 }
 
 .darkroom-orbit--one {
@@ -78,7 +77,7 @@
   bottom: -250px;
   left: -230px;
   width: 740px;
-  opacity: 0.36;
+  opacity: 0.18;
   transform: rotate(24deg);
   animation: darkroom-orbit-drift 42s ease-in-out infinite alternate-reverse;
 }
@@ -94,20 +93,20 @@
 
 .darkroom-portfolio::before {
   background:
-    linear-gradient(122deg, transparent 0 19%, rgba(108, 143, 181, 0.2) 28%, transparent 43%),
-    linear-gradient(47deg, transparent 0 31%, rgba(178, 132, 89, 0.18) 42%, transparent 59%),
-    linear-gradient(160deg, rgba(18, 26, 38, 0.95), rgba(32, 39, 49, 0.72) 42%, rgba(12, 16, 23, 0.98));
+    linear-gradient(122deg, transparent 0 20%, rgba(108, 143, 181, 0.13) 30%, transparent 45%),
+    linear-gradient(47deg, transparent 0 33%, rgba(178, 132, 89, 0.1) 45%, transparent 62%),
+    linear-gradient(160deg, rgba(18, 26, 38, 0.95), rgba(30, 38, 49, 0.64) 44%, rgba(12, 16, 23, 0.98));
   background-size: 160% 160%, 150% 150%, 100% 100%;
-  animation: portfolio-gradient-drift 26s ease-in-out infinite alternate;
+  animation: portfolio-gradient-drift 34s ease-in-out infinite alternate;
 }
 
 .darkroom-portfolio::after {
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.34;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
-  background-size: 72px 72px;
+    linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 88px 88px;
   mask-image: linear-gradient(180deg, transparent, black 18%, black 78%, transparent);
 }
 
@@ -142,6 +141,8 @@
 }
 
 .darkroom-section {
+  --section-glow-rgb: 108, 143, 181;
+  --section-glow-opacity: 0.045;
   position: relative;
   z-index: 1;
   width: min(var(--layout-max), calc(100% - 80px));
@@ -159,6 +160,40 @@
   height: 1px;
   content: "";
   background: linear-gradient(90deg, transparent, rgba(244, 241, 233, 0.22), transparent);
+}
+
+.darkroom-section::after {
+  position: absolute;
+  top: 8%;
+  right: -8%;
+  z-index: -1;
+  width: min(46vw, 640px);
+  aspect-ratio: 1;
+  content: "";
+  background: radial-gradient(circle, rgba(var(--section-glow-rgb), var(--section-glow-opacity)), transparent 66%);
+  pointer-events: none;
+}
+
+.darkroom-manifesto {
+  --section-glow-rgb: 108, 143, 181;
+}
+
+.darkroom-skills {
+  --section-glow-rgb: 148, 186, 116;
+}
+
+.darkroom-work {
+  --section-glow-rgb: 153, 132, 218;
+  --section-glow-opacity: 0.05;
+}
+
+.darkroom-timeline {
+  --section-glow-rgb: 216, 163, 90;
+}
+
+.darkroom-contact {
+  --section-glow-rgb: 244, 241, 233;
+  --section-glow-opacity: 0.035;
 }
 
 .darkroom-kicker {
@@ -213,12 +248,12 @@
   height: 34%;
   content: "";
   background:
-    linear-gradient(92deg, rgba(108, 143, 181, 0.18), rgba(244, 241, 233, 0.18), rgba(178, 132, 89, 0.1)),
-    linear-gradient(180deg, transparent, rgba(244, 241, 233, 0.08), transparent);
-  filter: blur(30px);
-  opacity: 0.72;
+    linear-gradient(92deg, rgba(108, 143, 181, 0.12), rgba(244, 241, 233, 0.12), rgba(178, 132, 89, 0.07)),
+    linear-gradient(180deg, transparent, rgba(244, 241, 233, 0.045), transparent);
+  filter: blur(24px);
+  opacity: 0.5;
   transform: skewY(-10deg);
-  animation: darkroom-hero-glow 6s ease-in-out infinite alternate;
+  animation: darkroom-hero-glow 12s ease-in-out infinite alternate;
 }
 
 .darkroom-hero__copy h1,
@@ -247,11 +282,11 @@
   inset: 6% -18%;
   z-index: -1;
   content: "";
-  background: linear-gradient(105deg, transparent 22%, rgba(244, 241, 233, 0.22) 44%, transparent 64%);
-  filter: blur(18px);
+  background: linear-gradient(105deg, transparent 24%, rgba(244, 241, 233, 0.14) 46%, transparent 66%);
+  filter: blur(14px);
   opacity: 0;
   transform: translateX(-44%);
-  animation: darkroom-title-sweep 5.8s ease-in-out 0.9s infinite;
+  animation: darkroom-title-sweep 9s ease-in-out 1.2s infinite;
 }
 
 .darkroom-hero__copy h1 span {
@@ -382,13 +417,13 @@
 
 @keyframes darkroom-hero-glow {
   from {
-    opacity: 0.45;
+    opacity: 0.32;
     transform: translate3d(-2%, 0, 0) skewY(-10deg);
   }
 
   to {
-    opacity: 0.86;
-    transform: translate3d(5%, -4%, 0) skewY(-7deg);
+    opacity: 0.58;
+    transform: translate3d(3%, -2%, 0) skewY(-8deg);
   }
 }
 
@@ -400,7 +435,7 @@
   }
 
   62% {
-    opacity: 0.72;
+    opacity: 0.42;
   }
 
   88%,
@@ -575,8 +610,8 @@
   border: 1px solid rgba(244, 241, 233, 0.13);
   border-radius: 8px;
   background:
-    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(var(--project-accent-rgb), 0.18), transparent 28%),
-    linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.11), transparent 34%),
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(var(--project-accent-rgb), 0.1), transparent 30%),
+    linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.075), transparent 36%),
     linear-gradient(180deg, rgba(244, 241, 233, 0.045), rgba(244, 241, 233, 0.018));
   box-shadow:
     inset 0 1px 0 rgba(244, 241, 233, 0.06),
@@ -584,11 +619,10 @@
   transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(0);
   transform-style: preserve-3d;
   transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms ease,
-    background 180ms ease;
-  will-change: transform;
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease,
+    background 220ms ease;
 }
 
 .darkroom-project::before {
@@ -606,7 +640,7 @@
   inset: 0;
   content: "";
   pointer-events: none;
-  background: linear-gradient(110deg, transparent 18%, rgba(244, 241, 233, 0.12) 48%, transparent 68%);
+  background: linear-gradient(110deg, transparent 18%, rgba(244, 241, 233, 0.075) 48%, transparent 68%);
   opacity: 0;
   transform: translateX(-120%);
   transition:
@@ -615,20 +649,20 @@
 }
 
 .darkroom-project:hover {
-  border-color: rgba(var(--project-accent-rgb), 0.42);
+  border-color: rgba(var(--project-accent-rgb), 0.32);
   background:
-    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(var(--project-accent-rgb), 0.26), transparent 30%),
-    linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.15), transparent 36%),
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(var(--project-accent-rgb), 0.16), transparent 32%),
+    linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.1), transparent 38%),
     linear-gradient(180deg, rgba(244, 241, 233, 0.055), rgba(244, 241, 233, 0.022));
   box-shadow:
     inset 0 1px 0 rgba(244, 241, 233, 0.1),
-    0 24px 90px rgba(var(--project-accent-rgb), 0.11),
-    0 20px 80px rgba(0, 0, 0, 0.18);
-  transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-5px);
+    0 20px 62px rgba(var(--project-accent-rgb), 0.075),
+    0 16px 56px rgba(0, 0, 0, 0.14);
+  transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-3px);
 }
 
 .darkroom-project:hover::after {
-  opacity: 1;
+  opacity: 0.7;
   transform: translateX(120%);
 }
 
@@ -807,15 +841,15 @@
   text-decoration: none;
   transition:
     color 160ms ease,
-    padding-left 160ms ease,
-    border-color 160ms ease;
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .darkroom-contact-list a:hover,
 .darkroom-contact-list a:focus-visible {
-  padding-left: 12px;
   border-color: rgba(244, 241, 233, 0.34);
   color: rgb(255, 252, 244);
+  transform: translateX(8px);
 }
 
 .darkroom-contact-list strong {
@@ -865,6 +899,13 @@
     width: calc(100% - 40px);
     min-height: auto;
     padding: 82px 0 66px;
+  }
+
+  .darkroom-section::after,
+  .darkroom-hero__copy::before,
+  .darkroom-hero__title::after,
+  .darkroom-hero-mark {
+    display: none;
   }
 
   .darkroom-hero {

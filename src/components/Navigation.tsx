@@ -1,23 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { navItems } from '../data/portfolio'
 
 export function Navigation() {
   const primaryItems = navItems.filter((item) => item.label !== 'Contact')
   const [activeHref, setActiveHref] = useState('#identity')
   const [hasScrolled, setHasScrolled] = useState(false)
-
-  useEffect(() => {
-    const updateScrolled = () => setHasScrolled(window.scrollY > 24)
-    updateScrolled()
-    window.addEventListener('scroll', updateScrolled, { passive: true })
-
-    return () => window.removeEventListener('scroll', updateScrolled)
-  }, [])
+  const activeHrefRef = useRef(activeHref)
+  const hasScrolledRef = useRef(hasScrolled)
+  const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
     const sectionIds = navItems.map((item) => item.href.replace('#', '')).filter(Boolean)
 
-    const updateActiveSection = () => {
+    const updateNavigationState = () => {
+      frameRef.current = null
+      const nextScrolled = window.scrollY > 24
+
+      if (hasScrolledRef.current !== nextScrolled) {
+        hasScrolledRef.current = nextScrolled
+        setHasScrolled(nextScrolled)
+      }
+
       const readLine = window.scrollY + window.innerHeight * 0.38
       const nextSection = sectionIds.reduce((current, id) => {
         const section = document.getElementById(id)
@@ -29,16 +32,29 @@ export function Navigation() {
         return section.offsetTop <= readLine ? `#${id}` : current
       }, '#identity')
 
-      setActiveHref(nextSection)
+      if (activeHrefRef.current !== nextSection) {
+        activeHrefRef.current = nextSection
+        setActiveHref(nextSection)
+      }
     }
 
-    updateActiveSection()
-    window.addEventListener('scroll', updateActiveSection, { passive: true })
-    window.addEventListener('resize', updateActiveSection)
+    const requestNavigationUpdate = () => {
+      if (frameRef.current === null) {
+        frameRef.current = window.requestAnimationFrame(updateNavigationState)
+      }
+    }
+
+    updateNavigationState()
+    window.addEventListener('scroll', requestNavigationUpdate, { passive: true })
+    window.addEventListener('resize', requestNavigationUpdate)
 
     return () => {
-      window.removeEventListener('scroll', updateActiveSection)
-      window.removeEventListener('resize', updateActiveSection)
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current)
+      }
+
+      window.removeEventListener('scroll', requestNavigationUpdate)
+      window.removeEventListener('resize', requestNavigationUpdate)
     }
   }, [])
 
