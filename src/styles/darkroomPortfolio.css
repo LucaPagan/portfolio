@@ -13,6 +13,95 @@
   --type-contact: 2.8rem;
 }
 
+.darkroom-ambient,
+.darkroom-noise,
+.darkroom-orbit,
+.darkroom-data-mark {
+  position: fixed;
+  pointer-events: none;
+}
+
+.darkroom-ambient {
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.darkroom-noise {
+  inset: 0;
+  opacity: 0.08;
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(244, 241, 233, 0.38) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 72% 58%, rgba(244, 241, 233, 0.18) 0 1px, transparent 1.5px);
+  background-position: 0 0, 38px 56px;
+  background-size: 132px 132px, 188px 188px;
+  mix-blend-mode: overlay;
+  animation: darkroom-noise-drift 18s steps(8) infinite;
+}
+
+.darkroom-orbit {
+  width: 620px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(244, 241, 233, 0.08);
+  border-radius: 50%;
+  opacity: 0.6;
+  transform: rotate(-18deg);
+}
+
+.darkroom-orbit::before,
+.darkroom-orbit::after {
+  position: absolute;
+  content: "";
+  border-radius: inherit;
+}
+
+.darkroom-orbit::before {
+  inset: 13%;
+  border: 1px solid rgba(108, 143, 181, 0.14);
+}
+
+.darkroom-orbit::after {
+  top: 15%;
+  right: 21%;
+  width: 7px;
+  height: 7px;
+  background: rgba(244, 241, 233, 0.78);
+  box-shadow: 0 0 26px rgba(108, 143, 181, 0.44);
+}
+
+.darkroom-orbit--one {
+  top: 9%;
+  right: -170px;
+  animation: darkroom-orbit-drift 34s ease-in-out infinite alternate;
+}
+
+.darkroom-orbit--two {
+  bottom: -250px;
+  left: -230px;
+  width: 740px;
+  opacity: 0.36;
+  transform: rotate(24deg);
+  animation: darkroom-orbit-drift 42s ease-in-out infinite alternate-reverse;
+}
+
+.darkroom-data-mark {
+  color: rgba(244, 241, 233, 0.28);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.darkroom-data-mark--one {
+  right: 5vw;
+  bottom: 12svh;
+}
+
+.darkroom-data-mark--two {
+  top: 26svh;
+  left: 4vw;
+}
+
 .darkroom-portfolio::before,
 .darkroom-portfolio::after {
   position: fixed;
@@ -51,8 +140,29 @@
   }
 }
 
+@keyframes darkroom-noise-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-28px, 18px, 0);
+  }
+}
+
+@keyframes darkroom-orbit-drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-18deg);
+  }
+
+  to {
+    transform: translate3d(-4%, 3%, 0) rotate(-8deg);
+  }
+}
+
 .darkroom-section {
   position: relative;
+  z-index: 1;
   width: min(var(--layout-max), calc(100% - 80px));
   min-height: auto;
   margin: 0 auto;
@@ -96,6 +206,7 @@
 
 .darkroom-hero {
   display: grid;
+  overflow: hidden;
   min-height: 100svh;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
   align-items: end;
@@ -108,7 +219,25 @@
 }
 
 .darkroom-hero__copy {
+  position: relative;
   align-self: center;
+  z-index: 2;
+}
+
+.darkroom-hero__copy::before {
+  position: absolute;
+  inset: 18% auto auto -6%;
+  z-index: -1;
+  width: min(58vw, 760px);
+  height: 34%;
+  content: "";
+  background:
+    linear-gradient(92deg, rgba(108, 143, 181, 0.18), rgba(244, 241, 233, 0.18), rgba(178, 132, 89, 0.1)),
+    linear-gradient(180deg, transparent, rgba(244, 241, 233, 0.08), transparent);
+  filter: blur(30px);
+  opacity: 0.72;
+  transform: skewY(-10deg);
+  animation: darkroom-hero-glow 6s ease-in-out infinite alternate;
 }
 
 .darkroom-hero__copy h1,
@@ -126,13 +255,27 @@
 
 .darkroom-hero__copy h1 {
   display: grid;
+  position: relative;
   margin-top: 20px;
   font-size: var(--type-hero);
   line-height: 0.92;
 }
 
+.darkroom-hero__title::after {
+  position: absolute;
+  inset: 6% -18%;
+  z-index: -1;
+  content: "";
+  background: linear-gradient(105deg, transparent 22%, rgba(244, 241, 233, 0.22) 44%, transparent 64%);
+  filter: blur(18px);
+  opacity: 0;
+  transform: translateX(-44%);
+  animation: darkroom-title-sweep 5.8s ease-in-out 0.9s infinite;
+}
+
 .darkroom-hero__copy h1 span {
   display: block;
+  will-change: transform, opacity, filter;
 }
 
 .darkroom-hero__note {
@@ -201,6 +344,82 @@
   color: var(--portfolio-soft);
   font-size: 0.95rem;
   line-height: 1.45;
+}
+
+.darkroom-scroll-cue {
+  position: absolute;
+  bottom: 34px;
+  left: 0;
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 10px;
+  color: var(--portfolio-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.darkroom-scroll-cue::before {
+  width: 52px;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, rgba(244, 241, 233, 0.58), transparent);
+  transform-origin: left center;
+  animation: darkroom-scroll-pulse 1.8s ease-in-out infinite;
+}
+
+.darkroom-scroll-cue svg {
+  transition: transform 160ms ease;
+}
+
+.darkroom-scroll-cue:hover svg,
+.darkroom-scroll-cue:focus-visible svg {
+  transform: translateY(3px);
+}
+
+@keyframes darkroom-hero-glow {
+  from {
+    opacity: 0.45;
+    transform: translate3d(-2%, 0, 0) skewY(-10deg);
+  }
+
+  to {
+    opacity: 0.86;
+    transform: translate3d(5%, -4%, 0) skewY(-7deg);
+  }
+}
+
+@keyframes darkroom-title-sweep {
+  0%,
+  50% {
+    opacity: 0;
+    transform: translateX(-44%);
+  }
+
+  62% {
+    opacity: 0.72;
+  }
+
+  88%,
+  100% {
+    opacity: 0;
+    transform: translateX(44%);
+  }
+}
+
+@keyframes darkroom-scroll-pulse {
+  0%,
+  100% {
+    opacity: 0.36;
+    transform: scaleX(0.72);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 }
 
 .darkroom-manifesto,
@@ -303,7 +522,8 @@
   font-size: 0.9rem;
   transition:
     background 160ms ease,
-    border-color 160ms ease;
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
 .darkroom-project .darkroom-inline-list li {
@@ -318,14 +538,33 @@
   background: rgba(var(--project-accent-rgb), 0.12);
 }
 
+.darkroom-project:hover .darkroom-inline-list li {
+  border-color: rgba(244, 241, 233, 0.24);
+  background: rgba(244, 241, 233, 0.055);
+}
+
+.darkroom-project:hover .darkroom-inline-list--signal li {
+  border-color: rgba(var(--project-accent-rgb), 0.52);
+  background: rgba(var(--project-accent-rgb), 0.17);
+}
+
 .darkroom-project-list {
   display: grid;
   gap: 18px;
   margin-top: 48px;
+  perspective: 1400px;
+}
+
+.darkroom-project-reveal {
+  min-width: 0;
 }
 
 .darkroom-project {
   --project-accent-rgb: 108, 143, 181;
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
   display: grid;
   position: relative;
   grid-template-columns: 64px minmax(250px, 0.74fr) minmax(340px, 1fr);
@@ -335,13 +574,20 @@
   border: 1px solid rgba(244, 241, 233, 0.13);
   border-radius: 8px;
   background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(var(--project-accent-rgb), 0.18), transparent 28%),
     linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.11), transparent 34%),
     linear-gradient(180deg, rgba(244, 241, 233, 0.045), rgba(244, 241, 233, 0.018));
-  box-shadow: inset 0 1px 0 rgba(244, 241, 233, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 241, 233, 0.06),
+    0 18px 70px rgba(0, 0, 0, 0);
+  transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(0);
+  transform-style: preserve-3d;
   transition:
     border-color 180ms ease,
+    box-shadow 180ms ease,
     transform 180ms ease,
     background 180ms ease;
+  will-change: transform;
 }
 
 .darkroom-project::before {
@@ -354,12 +600,35 @@
   background: rgba(var(--project-accent-rgb), 0.88);
 }
 
+.darkroom-project::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 18%, rgba(244, 241, 233, 0.12) 48%, transparent 68%);
+  opacity: 0;
+  transform: translateX(-120%);
+  transition:
+    opacity 180ms ease,
+    transform 780ms ease;
+}
+
 .darkroom-project:hover {
   border-color: rgba(var(--project-accent-rgb), 0.42);
   background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(var(--project-accent-rgb), 0.26), transparent 30%),
     linear-gradient(135deg, rgba(var(--project-accent-rgb), 0.15), transparent 36%),
     linear-gradient(180deg, rgba(244, 241, 233, 0.055), rgba(244, 241, 233, 0.022));
-  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 241, 233, 0.1),
+    0 24px 90px rgba(var(--project-accent-rgb), 0.11),
+    0 20px 80px rgba(0, 0, 0, 0.18);
+  transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-5px);
+}
+
+.darkroom-project:hover::after {
+  opacity: 1;
+  transform: translateX(120%);
 }
 
 .darkroom-project[data-accent="aqua"] {
@@ -468,6 +737,15 @@
   border-color: rgba(var(--project-accent-rgb), 0.75);
   background: rgb(255, 252, 244);
   transform: translateY(-1px);
+}
+
+.darkroom-repo-button svg:last-child {
+  transition: transform 160ms ease;
+}
+
+.darkroom-repo-button:hover svg:last-child,
+.darkroom-repo-button:focus-visible svg:last-child {
+  transform: translate(3px, -3px);
 }
 
 .darkroom-repo-button span {
