@@ -396,12 +396,12 @@
 
 .darkroom-hero-mark--one {
   right: 0;
-  bottom: 96px;
+  bottom: 76px;
 }
 
 .darkroom-hero-mark--two {
-  top: 26svh;
-  left: 16px;
+  bottom: 76px;
+  left: 0;
 }
 
 @keyframes darkroom-hero-glow {
