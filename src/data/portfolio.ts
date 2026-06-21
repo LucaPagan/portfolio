@@ -117,11 +117,11 @@ export const projects: Project[] = [
     eyebrow: 'offline-first nature platform',
     year: '2026',
     problem:
-      'Unire esperienza visitatore e gestione operativa per l’Oasi WWF Astroni, mantenendo percorsi, POI, eventi, media e gamification affidabili anche con rete instabile.',
+      'Merge visitor experience and operational management for the WWF Astroni Oasis, keeping routes, POIs, events, media, and gamification reliable even with an unstable network connection.',
     solution:
-      'Piattaforma composta da app visitor SwiftUI offline-first e console iPadOS gestionale: SwiftData locale, Supabase, contenuti scaricabili, QR offline, storage media e sync controllato.',
+      'A platform composed of an offline-first SwiftUI visitor app and an iPadOS management console: local SwiftData, Supabase, downloadable content, offline QR codes, media storage, and controlled sync.',
     impact:
-      'Un ecosistema unico: chi visita vive un journey immersivo e resiliente, mentre chi gestisce puo preparare contenuti, pacchetti e aggiornamenti senza perdere controllo operativo.',
+      'A unified ecosystem: visitors enjoy an immersive and resilient journey, while management can prepare content, packages, and updates without losing operational control.',
     stack: ['SwiftUI', 'iPadOS', 'SwiftData', 'Supabase', 'Offline sync'],
     signals: ['Visitor app + admin console', 'QR offline', 'Media packages'],
     accent: 'aqua',
@@ -134,11 +134,11 @@ export const projects: Project[] = [
     repository: 'https://github.com/LucaPagan/Americano-Challenge-2-',
     repoName: 'Americano-Challenge-2-',
     problem:
-      'Riconoscere ripetizioni di bicipite da accelerometro e giroscopio Apple Watch, partendo da dati grezzi raccolti in condizioni reali.',
+      'Recognize bicep curl repetitions from Apple Watch accelerometer and gyroscope, starting from raw data collected in real-world conditions.',
     solution:
-      'Pipeline completa: data logger watchOS a 50Hz, export CSV verso iPhone, training Create ML e app finale con sliding window da 100 campioni, filtro anti-jitter e state machine.',
+      'End-to-end pipeline: 50Hz watchOS data logger, CSV export to iPhone, Create ML training, and a final app with a 100-sample sliding window, anti-jitter filter, and state machine.',
     impact:
-      'Prototipo end-to-end di ML on-device per fitness: inferenza realtime, feedback aptico, goal configurabile da iPhone e storico set via WatchConnectivity.',
+      'End-to-end on-device ML prototype for fitness: realtime inference, haptic feedback, configurable goals from iPhone, and set history via WatchConnectivity.',
     stack: ['watchOS', 'CoreMotion', 'Core ML', 'Create ML', 'WatchConnectivity'],
     signals: ['50Hz sampling', '100-sample window', 'Anti-jitter filter'],
     accent: 'amber',
@@ -151,11 +151,11 @@ export const projects: Project[] = [
     repository: 'https://github.com/LucaPagan/Tic-Tac-Toe-LSO',
     repoName: 'Tic-Tac-Toe-LSO',
     problem:
-      'Realizzare per l’esame di Laboratorio di Sistemi Operativi un Tris multiplayer con concorrenza, lobby, join request e partite isolate tra client.',
+      'Build a multiplayer Tic-Tac-Toe game with concurrency, lobbies, join requests, and isolated matches between clients for the Operating Systems Laboratory exam.',
     solution:
-      'Architettura client-server con socket TCP: server C multithread POSIX, opcode di rete, session state machine, client JavaFX dark theme e demo scalabile con Docker Compose.',
+      'Client-server architecture with TCP sockets: multithreaded POSIX C server, network opcodes, session state machine, dark theme JavaFX client, and a scalable demo with Docker Compose.',
     impact:
-      'Progetto d’esame completo: sincronizzazione stati, session ID univoci, rivincita, broadcast lobby e avvio ripetibile con Docker per testare piu client.',
+      'Complete university project: state synchronization, unique session IDs, rematches, lobby broadcasting, and repeatable startup with Docker to test multiple clients.',
     stack: ['C', 'POSIX threads', 'TCP sockets', 'JavaFX', 'Docker Compose'],
     signals: ['Network opcodes', 'Session states', 'Docker scaling'],
     accent: 'coral',
@@ -168,11 +168,11 @@ export const projects: Project[] = [
     repository: 'https://github.com/LucaPagan/GameSCH6',
     repoName: 'GameSCH6',
     problem:
-      'Trasformare il tema degli effetti negativi del fumo in un gioco iOS capace di far percepire al giocatore conseguenze e progressione in modo interattivo.',
+      'Transform the theme of the negative effects of smoking into an iOS game that makes the player perceive consequences and progression interactively.',
     solution:
-      'SpriteKit game con generazione deterministica a chunk, checkpoint, lanes calcolate, stamina/salute polmonare e HabitTracker con rollover giornaliero.',
+      'SpriteKit game with deterministic chunk generation, checkpoints, calculated lanes, stamina/lung health, and a HabitTracker with daily rollover.',
     impact:
-      'Oltre al lato tecnico, il gioco usa meccaniche e feedback per sensibilizzare: il gameplay rende visibili gli effetti negativi del fumo invece di limitarsi a raccontarli.',
+      'Beyond the technical side, the game uses mechanics and feedback to raise awareness: the gameplay makes the negative effects of smoking visible rather than just telling a story about them.',
     stack: ['SpriteKit', 'GameplayKit', 'Swift', 'UserDefaults', 'Procedural generation'],
     signals: ['Fixed seed', 'Chunk streaming', 'Health feedback loop'],
     accent: 'violet',
@@ -185,11 +185,11 @@ export const projects: Project[] = [
     repository: 'https://github.com/LucaPagan/UninaEstatesApplication',
     repoName: 'UninaEstatesApplication / BackEnd',
     problem:
-      'Progetto universitario di Ingegneria del Software: creare un’app real estate e documentare anche ricerca, analisi, requisiti e decisioni progettuali.',
+      'University Software Engineering project: create a real estate app and document research, analysis, requirements, and design decisions.',
     solution:
-      'Client Android Kotlin con Jetpack Compose, mappe, Retrofit, Coil e notifiche; backend Kotlin/Spring Boot con JPA, Security, Redis cache e PostgreSQL.',
+      'Android Kotlin client with Jetpack Compose, maps, Retrofit, Coil, and notifications; Kotlin/Spring Boot backend with JPA, Security, Redis cache, and PostgreSQL.',
     impact:
-      'Il valore non e solo l’app: il progetto copre il percorso di ingegneria software, dalla scelta delle soluzioni alla costruzione full-stack del prodotto.',
+      'The value goes beyond the app: the project covers the software engineering process, from solution choices to the full-stack construction of the product.',
     stack: ['Kotlin', 'Jetpack Compose', 'Spring Boot', 'PostgreSQL', 'Firebase'],
     signals: ['Requirements work', 'Decision making', 'REST + mobile'],
     accent: 'aqua',
@@ -202,11 +202,11 @@ export const projects: Project[] = [
     repository: 'https://github.com/LucaPagan/Maieutic',
     repoName: 'Maieutic',
     problem:
-      'Immaginare un’app che aiuti a riabilitarsi dalla dipendenza dalle AI, accompagnando l’utente con percorsi, metriche e consapevolezza progressiva.',
+      'Imagine an app that helps rehabilitate users from AI addiction, guiding them with paths, metrics, and progressive awareness.',
     solution:
-      'Router SwiftUI dichiarativo con loading, onboarding, calibrazione, auth, nickname e main area; SwiftData per utenti, metriche, thread e messaggi.',
+      'Declarative SwiftUI router with loading, onboarding, calibration, auth, nickname, and main area; SwiftData for users, metrics, threads, and messages.',
     impact:
-      'Prototipo product-oriented centrato sul cambiamento comportamentale: flussi progressivi, metriche locali e UI animata per rendere visibile il percorso di recupero.',
+      'Product-oriented prototype focused on behavioral change: progressive flows, local metrics, and animated UI to make the recovery journey visible.',
     stack: ['SwiftUI', 'SwiftData', 'Authentication', 'Product flows', 'Animated UI'],
     signals: ['Recovery flow', 'Calibration', 'Local metrics'],
     accent: 'lime',
@@ -259,27 +259,27 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: 'Native Product',
-    description: 'Esperienze mobile con sensazione di prodotto finito.',
+    description: 'Mobile experiences with a finished product feel.',
     items: ['SwiftUI', 'SwiftData', 'SpriteKit', 'watchOS', 'Jetpack Compose', 'Material 3'],
   },
   {
     title: 'Signals & AI',
-    description: 'Sensori, modelli locali e logiche realtime robuste.',
+    description: 'Sensors, local models, and robust realtime logic.',
     items: ['CoreMotion', 'Create ML', 'Core ML', 'Sliding windows', 'State machines', 'Haptics'],
   },
   {
     title: 'Cloud & Data',
-    description: 'Sync, storage e persistenza pensati per contesti reali.',
+    description: 'Sync, storage, and persistence designed for real-world contexts.',
     items: ['Supabase', 'PostgreSQL', 'Redis', 'Spring Boot', 'Firebase', 'Offline cache'],
   },
   {
     title: 'Systems',
-    description: 'Fondamenta tecniche: concorrenza, rete e deploy ripetibile.',
+    description: 'Technical foundations: concurrency, networking, and repeatable deployments.',
     items: ['C', 'POSIX threads', 'TCP sockets', 'Docker Compose', 'JavaFX', 'Testing'],
   },
   {
     title: 'Frontend Craft',
-    description: 'Interfacce moderne, veloci e animazioni consapevoli.',
+    description: 'Modern, fast interfaces and mindful animations.',
     items: ['React', 'TypeScript', 'Vite', 'Motion', 'GSAP', 'Three.js'],
   },
 ]
@@ -287,27 +287,27 @@ export const skillGroups: SkillGroup[] = [
 export const timeline: TimelineItem[] = [
   {
     period: 'Nov 2025',
-    title: 'AI on-device e watchOS',
+    title: 'AI on-device and watchOS',
     description:
-      'Dal data logging su Apple Watch al modello Create ML integrato in un’app di rep counting realtime.',
+      'From data logging on Apple Watch to a Create ML model integrated into a realtime rep-counting app.',
   },
   {
     period: 'Feb 2026',
     title: 'Mobile + backend product stack',
     description:
-      'Real estate mobile con Android Compose e backend Kotlin/Spring, includendo mappe, API e servizi cloud.',
+      'Real estate mobile app with Android Compose and a Kotlin/Spring backend, including maps, APIs, and cloud services.',
   },
   {
     period: 'Mar - Apr 2026',
-    title: 'Game systems e sistemi concorrenti',
+    title: 'Game systems and concurrent systems',
     description:
-      'Da un gioco SpriteKit con generazione procedurale a un server C multithread con client JavaFX e Docker.',
+      'From a SpriteKit game with procedural generation to a multithreaded C server with a JavaFX client and Docker.',
   },
   {
     period: 'Jun 2026',
-    title: 'Ecosistemi offline-first',
+    title: 'Offline-first ecosystems',
     description:
-      'Piattaforma WWF Astroni con visitor journey, gestionale iPad, sync, storage, contenuti scaricabili e gamification.',
+      'WWF Astroni platform with a visitor journey, iPad management console, sync, storage, downloadable content, and gamification.',
   },
 ]
 
